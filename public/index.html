@@ -1,0 +1,665 @@
+<!doctype html>
+<!--Copyright James Palmer 2019
+-->
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="James' attempt at bringing game nights to the 21st century">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0">
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <title>Bagminge</title>
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="JP">
+  <meta name="theme-color" content="#303F9F">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="JP">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
+
+  <!-- Tile icon for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+  <meta name="msapplication-navbutton-color" content="#303F9F">
+
+  <!-- Material Design Lite -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.blue_grey-orange.min.css">
+  <script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- manifest and icons -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#009688">
+    <link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FJP%20Icon.png?v=1562202118739">
+
+   <!-- register service worker 
+  <script src="register-sw.js" defer></script>
+-->
+  
+  <link rel="stylesheet" href="main.css">
+
+  <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+
+  <script>
+  // Web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBuXyvgX4mBbFB-NfLK3HYE88_6h_4-5Tg",
+    authDomain: "bagminge.firebaseapp.com",
+    databaseURL: "https://bagminge.firebaseio.com",
+    projectId: "bagminge",
+    storageBucket: "bagminge.appspot.com",
+    messagingSenderId: "492822420231",
+    appId: "1:492822420231:web:abb6b44b182e7c37"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);    
+</script>
+</head>
+<body>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+<!-- Header section containing logo and menu
+****************************-->
+<div id="header">
+  <header> 
+  <div class="mdl-layout__header-row titlebar teal">
+       <h3>BAGMINGE</h3><sup><h9>  BETA</h9></sup>
+    <a class="btn-floating btn-small waves-effect waves-light logoutLblPos" onclick="bmLogOut();"><i class="material-icons">exit_to_app</i></a>
+    <a class="loginName" id="loginName"></a>
+    </div>
+     <div class="tab mdl-layout__header-row mdl-color-- teal lighten-3">
+      <div class="mdl-tab">
+        <div id="menu-goHome" style="display: none" class="is-active mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">home</i></div>
+        <div id="menu-start"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">play_arrow</i></div>
+        <div id="menu-teams"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">group</i></div>     
+        <div id="menu-scores" style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">insert_chart</i></div>     
+        <div id="menu-round"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">live_tv</i></div>      
+       </div>
+    </div>
+  </header>  
+</div>
+
+<main class="mdl-layout__content mdl-color--grey-100">
+  
+<!--*****************************    
+Welcome splash screen 
+**************************-->
+  <section id="page-splash" style="display:block">
+    <div align="center" class="container">
+    <h1></h1>
+      <!-- <h1>BAGMINGE</h1>  -->    
+<div>
+      <button id="join-button" onclick="joinScreen();" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">person_add</i> Join game</button>
+    </div>
+      <div class="row">
+        <div>
+     <p></p> <button id="create-button" onclick="createScreen()" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect orange"><i class="material-icons">create</i> Create new game</button>
+    </div>   
+      </div>      
+   </div>
+      </section>
+  
+    <!-- GAME OVER SCREEN
+**************************-->
+<section id="gameOverScreen" style="display:none">
+  <div class="container" >  
+     <div class="row">
+       <h3 type="text" id="gameOver" class="center-align">GAME OVER!</h3>
+      
+       </div>
+    </div> 
+</section>  
+  
+<!--*****************************  
+create new game screen 
+***********************************-->  
+<section id="createScreen" style="display:none">
+    <div class="container">
+      <a onclick="createBack()" class="btn-floating backbutton btn-small waves-effect waves-light"><i class="material-icons">chevron_left</i></a>
+        <div class="row input-field col s12 m6">
+            <input id="setupSessionName" type="text" maxlength="100" placeholder="Give your session a recognizable name">
+          <label>Session Name:</label>
+        </div>
+    <div id="enterPlayerChips" class="chips-placeholder">
+    </div>
+    <br>
+    <div class="input-field col s6 m3">
+    <select id="createSelectTeamNumber" class="icons" onchange="showTeamInputBoxes();">
+      <option disabled></option>
+      <option></option>
+      <option value="2" class="left">2 teams</option>
+      <option value="3"  class="left">3 teams</option>
+      <option value="4"  class="left">4 teams</option>
+    </select>
+    <label>How many teams?</label>
+  </div>
+  <div>
+       <input id="setupTeamOne" type="text" maxlength="20" placeholder="Team 1 name (max 20 characters)">
+       <input id="setupTeamTwo" type="text" maxlength="20" placeholder="Team 2 name (max 20 characters)">
+       <input id="setupTeamThree" type="text" style="display:none" maxlength="20" placeholder="Team 3 name (max 20 characters)">
+       <input id="setupTeamFour" type="text" style="display:none" maxlength="20" placeholder="Team 4 name (max 20 characters)">
+       <input id="setupTeamFive" type="text" style="display:none" maxlength="20" placeholder="Team 5 name (max 20 characters)">
+   </div>
+      <br>
+ <div class="input-field">
+    <select id="createNameCount">
+      <option disabled></option>
+      <option></option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
+      <option>9</option>
+      <option>10</option>
+     </select>
+      <label>How many names should each person enter?</label>
+ </div>
+  <br>    
+  <form action="#">
+    <p class="range-field inline">
+    <label>How many seconds for each turn?</label>
+      <input type="range" id="timePicked" min="20" max="100" value="60" step="5"/>
+    </p>
+  </form>
+    <div>
+    <button id="setupCreateGameSessionButton" onclick="createGameSession()" class="standard waves-effect waves-light btn"><i class="material-icons left">create</i>Create game session</button>  
+    </div>
+  </div>
+</section>
+ 
+<!--********************************
+Game create successfully screen
+*********************************-->
+<section id="createSuccess" style="display:none">
+<div class="container">
+  <br>
+  <h5>Game successfully created!</h5>
+  <br><hr>
+  <div class="input-field" id="createPlayerPick">
+    <select id="createSelectPlayer" onchange="showCreateJoinButton()">
+      <option disabled></option>
+      <option></option>
+     </select>
+      <label>Which player are you?</label>
+ </div>  
+     <div>
+   <button id="createJoinButton" onclick="createJoinGame()" style="display:none" class="btn-large"><i class="material-icons right">send</i> Join Game</button>
+    </div>
+</div>
+  
+</section> 
+
+  
+<!--*****************************  
+Join game screen 
+**************************-->
+  <section id="joinScreen" style="display:none">
+   <br>
+    <div class="container">
+      
+    <div class="input-field" id="session">
+    <select id="selectSession" onchange="sessionPick()">
+      <option disabled></option>
+      <option></option>
+       </select>
+      <label>Select a session:</label>
+    </div>
+    
+    <br>
+    <div style="display:none" class="input-field" id="player">
+    <select id="selectPlayer" onchange="playerPick()">
+      <option disabled></option>
+      <option></option>
+       </select>
+      <label>Select a player:</label>
+    </div>
+      <br>
+      <div>
+   <button id="joinGame" onclick="joinGame()" style="display:none" class="btn-large"><i class="material-icons right">send</i> Join Game</button>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+<!--*****************************    
+Waiting Screen - while players enter names
+**************************-->  
+  <section id="waitScreen" style="display:none">
+    <div align="center" class="container">
+    <h1></h1>
+      <h6>Waiting for remaining players to enter names into the bag</h6>
+      <p><br></p>
+    <div class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-teal-only">
+       <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+       </div><div class="circle-clipper right">
+        <div class="circle"></div>
+       </div>
+      </div>
+     </div>  
+  <div class="row">
+   <br><br><hr><p id="playersYetToEnter"></p>
+  </div>      
+  </div>   
+
+</section>
+  
+<!--*****************************    
+Game home Screen
+**************************-->
+  <section class="mdl-layout" id="homeScreen" style="display:none">
+    <div class="container">
+      <br>
+       <div class="row" id="homeNextInfo">
+         <div class="col s2"><h7><b>Next:</b></h7></div>
+      <div class="col s3"><h7 id="showNextPlayer" >Player</h7></div>
+      <div class="col s4"><h7 id="showNextTeam" >Team</h7></div>
+      <div  class="col s3"><h7 id="showRound">Round</h7></div>
+      </div>
+      <hr>
+      <div style="width:100%" class="row">   
+        <div class="row"><button id="homeStartButton" class="homebuttons waves-effect red lighten-2 btn"><i class="material-icons left">play_arrow</i>Start your turn</button></div>
+        <div class="row"><button id="homeTeamsButton" onclick="showTeamScreen()"  class="homebuttons waves-effect btn teal lighten-2"><i class="material-icons left">people_outline</i>Teams</button></div>
+         <div class="row"><button id="homeScoresButton" onclick="showScoresScreen()"  class="homebuttons waves-effect btn teal darken-1"><i class="material-icons left">insert_chart</i>Scores</button></div>  
+         <div class="row"><button id="homeRoundButton" onclick="showRoundScreen()"  class="homebuttons waves-effect btn teal darken-4"><i class="material-icons left">live_tv</i>Live round</button></div>           
+      </div>
+    </div>
+  </section>
+
+<!--*****************************  
+start screen 
+**************************-->
+  
+ <!-- pre-game start splash-->
+<section id="startScreen" style="display: none">
+  <section id="start-splash"> 
+  <div class="container">
+   <div id="startShowCurrentRound"></div>
+   <p id="startTimeLeft"></p>
+   <h5>Are you ready <span id="startShowPlayer"></span>?</h5>
+    <p></p>
+    <button id="gameStartButton" onclick="startRound()" class="standard waves-effect waves-light btn" ><i class="material-icons left">record_voice_over</i>Start round</button>
+  </div>
+  </section>
+</section>
+  
+<!-- game page -->
+<section style="display: none" id="gameStart">
+   <div class="container">
+    <div class="center-align">
+      <h2 type="text" id="gameShowName" class="center-align" style="font-size: 25pt;">bag name</h2>
+      <h2 class="timee" style="font-size: 60pt;" id="gameShowTime">-</h2>
+    </div>
+     
+  <div class="progress">
+      <div id="roundProgressBar" class="determinate" style="width: 0%"></div>
+  </div>
+        
+     <div class="row">
+       <h5 id="gameShowNamePassed" class="center-align" style="color: red">-</h5>
+       <h5 id="gameShowNumberLeft" class="center-align">-</h5>
+       <p> </p>
+          <div class="col s7 push-s5"><button id="gameGotItButton" onclick="gameGotItButton()"  class="waves-effect yesno btn" >Got it!</button></div>
+          <div class="col s5 pull-s7"><button id="gamePassButton" onclick="gamePassButton()"  class="waves-effect yesno red btn">Pass</button></div>
+      </div>
+      <div class="container">
+           <button style ="display: none; ,margin-left: 10pt;" id="gameGotPassButton" onclick="gameGotPassButton()" class="waves-effect btn-small"><i class="material-icons left">thumb_up</i>Got the passed name!</button>
+       </div>
+
+    </div>
+  </section>
+         
+<!-- End round splash page -->  
+<section id="roundEnd-splash" style="display:none">
+  <div class="container">
+  <section id="roundEndScore">
+  <h6 id="endRoundMessage" class="center">-</h6>  
+  <h6 id="endRoundScore" class="center">-</h6>
+    <div class="row">
+     <div class="col s6 collection" id="namesGuessed1" style="border:0px">
+       <a class="collection-header">Names Guessed:</a>
+        <li id="nameGuessed1" class="collection-item"></li>
+        <li id="nameGuessed3" class="collection-item"></li>
+        <li id="nameGuessed5" class="collection-item"></li>
+        <li id="nameGuessed7" class="collection-item"></li>
+        <li id="nameGuessed9" class="collection-item"></li>
+        <li id="nameGuessed11" class="collection-item"></li>
+        <li id="nameGuessed13" class="collection-item"></li>
+     </div>    
+      <div class="col s6 collection" id="namesGuessed2" style="border:0px">
+       <a class="collection-header">-</a>
+        <li id="nameGuessed2" class="collection-item"></li>
+        <li id="nameGuessed4" class="collection-item"></li>
+        <li id="nameGuessed6" class="collection-item"></li>
+        <li id="nameGuessed8" class="collection-item"></li>
+        <li id="nameGuessed10" class="collection-item"></li>
+        <li id="nameGuessed12" class="collection-item"></li>
+        <li id="nameGuessed14" class="collection-item"></li>
+     </div>    
+    </div>        
+  </section>
+  <button id="endRoundShowScores" onclick="endRoundNext();" class="btn-large"><i class="material-icons left">insert_chart</i> Show scores</button>
+  </div>  
+</section>
+  <!--directions_run for acting round-->
+     
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+  <!-- Show teams screen 
+*****************************-->
+<section id="teamsScreen" style="display:none">
+<div class="row">
+    <ul class="tabs">
+        <li class="tab col s3"><a href="#team1" id="teamOne" class="active">Team 1</a></li>
+        <li class="tab col s3"><a href="#team2" id="teamTwo" >Team 2</a></li>
+        <li class="tab col s3"><a style="display:none" href="#team3" id="teamThree">Team 3</a></li>
+        <li class="tab col s3"><a style="display:none" href="#team4" id="teamFour">Team 4</a></li>
+    </ul>
+<div class="container">
+<div id="team1" class="col s12">
+   <div id="teamShowTeamOne" class="container">
+      <div class="row">
+        <div class="col s12 ">
+         <div class="collection" style="border:0px">
+        <img style="width:40%;" class="center" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fteam1-logo.png?v=1561414377226" alt="Team 1">
+        <a class="collection-header center"><h5 id="showTeamOneName"></h5></a>
+        <li id="t1p1" class="collection-item"></li>
+        <li id="t1p2" class="collection-item"></li>
+        <li id="t1p3" class="collection-item"></li>
+        <li id="t1p4" class="collection-item"></li>
+        <li id="t1p5" class="collection-item"></li>
+        <li id="t1p6" class="collection-item"></li>
+        <li id="t1p7" class="collection-item"></li>
+        <li id="t1p8" class="collection-item"></li>
+        <li id="t1p9" class="collection-item"></li>
+        </div>    
+     </div>
+   </div>
+  </div>
+</div>
+    
+<div id="team2" class="col s12">
+  <div id="teamShowTeamTwo" class="container">
+      <div class="row">
+        <div class="col s12 ">
+         <div class="collection" style="border:0px">
+        <img style="width:40%;" class="center" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fteam2-logo.png?v=1561414377429" alt="Team 2">
+        <a class="collection-header center"><h5 id="showTeamTwoName"></h5></a>
+        <li id="t2p1" class="collection-item"></li>
+        <li id="t2p2" class="collection-item"></li>
+        <li id="t2p3" class="collection-item"></li>
+        <li id="t2p4" class="collection-item"></li>
+        <li id="t2p5" class="collection-item"></li>
+        <li id="t2p6" class="collection-item"></li>
+        <li id="t2p7" class="collection-item"></li>
+        <li id="t2p8" class="collection-item"></li>
+        <li id="t2p9" class="collection-item"></li>
+        </div>    
+      </div>
+    </div>
+ </div>
+</div>
+  
+<div id="team3" class="col s12">
+    <div id="teamShowTeamThree" class="container">
+      <div class="row">
+        <div class="col s12 ">
+         <div class="collection" style="border:0px">
+        <img style="width:40%;" class="center" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FTeam3.png?v=1561809418120" alt="Team 3">
+        <a class="collection-header center"><h5 id="showTeamThreeName"></h5></a>
+        <li id="t3p1" class="collection-item"></li>
+        <li id="t3p2" class="collection-item"></li>
+        <li id="t3p3" class="collection-item"></li>
+        <li id="t3p4" class="collection-item"></li>
+        <li id="t3p5" class="collection-item"></li>
+        <li id="t3p6" class="collection-item"></li>
+        <li id="t3p7" class="collection-item"></li>
+        <li id="t3p8" class="collection-item"></li>
+        <li id="t3p9" class="collection-item"></li>
+        </div>    
+      </div>
+    </div>
+ </div>
+</div>
+
+<div id="team4" class="col s12">
+  <div id="teamShowTeamFour" class="container">
+      <div class="row">
+        <div class="col s12 ">
+         <div class="collection" style="border:0px">
+        <img style="width:40%;" class="center" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FTeam4.png?v=1561809419014" alt="Team 2">
+        <a class="collection-header center"><h5 id="showTeamFourName"></h5></a>
+        <li id="t4p1" class="collection-item"></li>
+        <li id="t4p2" class="collection-item"></li>
+        <li id="t4p3" class="collection-item"></li>
+        <li id="t4p4" class="collection-item"></li>
+        <li id="t4p5" class="collection-item"></li>
+        <li id="t4p6" class="collection-item"></li>
+        <li id="t4p7" class="collection-item"></li>
+        <li id="t4p8" class="collection-item"></li>
+        <li id="t4p9" class="collection-item"></li>
+        </div>    
+      </div>
+    </div>
+  </div>
+</div>
+  
+  </div>
+</div>     
+  <script>
+//initialize Tabs
+$(document).ready(function(){$('.tabs').tabs();});
+
+</script>  
+</section>
+
+  <!-- show scores screen 
+**************************-->
+  <section id="scoresScreen" style="display:none">
+    <div class="container" >  
+          <div class="row scores1" id="gridOne">
+            <div class="col s10" id="scoreGridTeamOne">TEAM A
+             </div>
+            <div class="col s2" id="scoreGridTeamOneScore">-</div>
+          </div>
+          <div class="row scores2" id="gridTwo">
+            <div class="col s10" id="scoreGridTeamTwo">TEAM B
+             </div>
+            <div class="col s2" id="scoreGridTeamTwoScore">-</div>
+          </div>
+          <div class="row scores3" id="gridThree" style="display:none">
+              <div class="col s10" id="scoreGridTeamThree">TEAM C
+             </div>
+            <div class="col s2" id="scoreGridTeamThreeScore">-</div>
+          </div>
+          <div class="row scores2" id="gridFour" style="display:none">
+            <div class="col s10" id="scoreGridTeamFour">TEAM D
+             </div>
+            <div class="col s2" id="scoreGridTeamFourScore">-</div>
+          </div>
+      <div id="chartContainer" style="height: 280px; width: 100%; center-align"></div>
+      <br>
+      <div class="row scores2" id="mVPTag" style="display:none">
+        <div class="col s3">MVP: </div> 
+        <div class="col s7" id="mVP"></div>
+        <div class="col s2" id="mVPScore"></div> 
+      </div>
+     </div>
+</section>
+  
+  <!-- show live round screen 
+**************************-->
+<section id="roundScreen" style="display:none">
+  <div class="container" >  
+     <div class="row">
+       <br>
+       <div id="turnStatus" class="turnStatus">
+         <h5>No turn in progress</h5>
+       </div>
+    </div>
+    <div class="row">
+       <div id="turnInProgress" class="turnInProgress" style="display:none">
+           <h5 type="text" id="roundTeam" class="center-align"></h5>
+           <h5 type="text" id="roundPlayer"  class="center-align"></h5>
+       </div>
+    </div>
+    <div class="row">
+       <div id="turnInProgressNameScore" class="turnInProgressNameScore" style="display:none">
+           <h5 type="text" id="roundScoreNow" class="center-align"></h5>
+           <h5 type="text" id="lastNameGuessed" class="center-align"></h5>
+       </div>
+    </div>
+    <div class="row">
+          <h5 type="text" id="roundNextTeam"></h5>
+           <h5 type="text" id="roundNextPlayer"></h5>
+     </div> 
+  </div>
+</section>  
+
+  
+  <!-- show information screen screen 
+**************************-->
+ <!-- Modal Trigger -->
+  <button class="btn-floating btn-small waves-effect waves-light infoLblPos modal-trigger" data-target="howTo"><i class="material-icons">info_outline</i></button>
+ 
+  <!-- Modal Structure -->
+  <div id="howTo" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>How to play</h4>
+      <p>"Bag Minge" is the perfect blend of party game classics; combining articulate with charades where a good memory for names gets you ahead</p>
+      <p>Played across 3 rounds, teams of players take it in turns to draw names at random from the bag and either describe, give a clue or act it out for the rest of their team to guess</p>
+      <p><b>Starting the game</b></p>
+      <p>One player (or "Bagmaster") creates a new session and sets the parameters of the game. Once this is created, other players will be able to join the game and get going</p>
+      <p>First off, each player in the game enters between 3 and 10 names (decided by the Bagmaster in the setup) into the bag. These names can be celebrities, athletes, historical figures or even just your mates Mum. The only criteria is that the name has to be broadly recognisable to the other players</p>
+      <p>Once every player in the session has entered their names, the game begins and each player is randomly allocated to even teams</p>
+      <p>Each team will take it in turns to have one player draw names from the bag while the others try to guess it. Once a name is guessed, it is removed from the bag for that round. The player can pass on a name ONCE per turn, though they can always come back to it later.</p> 
+      <p>When the timer runs out, it's on to the next team to guess. The next player to draw from the bag will be shown on the home screen and the start turn button will be available for them to start their turn</p>
+      <p>If there are no names left in the bag, the round ends but your time gets carried over to the next round</p>
+      <p>At the end of the 3rd round, the team with the most names guessed wins! </p>
+      <hr><p><b>Round 1</b>
+      <p>Articulate the name in as many words as you like without mentioning the name itself, "sounds like" or "rhymes with"</p>
+      </p><hr><p><b>Round 2</b>
+      <p>Give a 1 word clue for the name; hint - the names are the same as in round 1 so use that for some inspiration. Once you've said your word, you're committed, no going back!</p>
+      </p><hr><p><b>Round 3</b>
+      <p>Act out the name; good old fashioned charades. Remember, the names are still the same!</p>
+      </p><hr><p>Once all of the names are guessed at the end of round 3, the scores are tallied and the winner announced!</p>    
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-teal btn-flat">Got it!</a>
+    </div>
+  </div>
+        
+  
+<!-- Enter names screen 
+**************************-->
+  <section  id="enterScreen" style="display: none">
+    <div class="container" >   
+    <div>
+        <h5>Player: <span id="enterPlayerPicked"></span></h5>
+        <h5>Session: <span id="enterSessionPicked"></span></h5>
+    </div>
+      <hr>
+     <div class="row"> 
+       Enter <span id="enterNameCount"></span> names into the minge bag:
+      </div>
+      <div class="col s6">
+         
+        <input class="nameInput" id="enterNameOne" style="width: 90%" type="text" maxlength="100" placeholder="Name 1" onclick="oneSelect()"><button type="button" style="display:none" id="randomWikiNameButton1" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameTwo" style="width: 90%" type="text" maxlength="100" placeholder="Name 2" onclick="twoSelect()"><button type="button" style="display:none" id="randomWikiNameButton2" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameThree"  style="width: 90%" type="text" maxlength="100" placeholder="Name 3" onclick="threeSelect()"><button type="button" style="display:none" id="randomWikiNameButton3" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameFour" style="width: 90%" type="text" maxlength="100" placeholder="Name 4" onclick="fourSelect()"><button type="button" style="display:none" id="randomWikiNameButton4" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameFive" style="width: 90%" type="text" maxlength="100" placeholder="Name 5" onclick="fiveSelect()"><button type="button" style="display:none" id="randomWikiNameButton5" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameSix" style="width: 90%" type="text" maxlength="100" placeholder="Name 6" onclick="sixSelect()"><button type="button" style="display:none" id="randomWikiNameButton6" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameSeven" style="width: 90%" type="text" maxlength="100" placeholder="Name 7" onclick="sevenSelect()"><button type="button" style="display:none" id="randomWikiNameButton7" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameEight" style="width: 90%"  type="text" maxlength="100" placeholder="Name 8" onclick="eightSelect()"><button type="button" style="display:none" id="randomWikiNameButton8" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameNine" style="width: 90%"  type="text" maxlength="100" placeholder="Name 9" onclick="nineSelect()"><button type="button" style="display:none" id="randomWikiNameButton9" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameTen" style="width: 90%" type="text" maxlength="100" placeholder="Name 10" onclick="tenSelect()"><button type="button" style="display:none" id="randomWikiNameButton10" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+      </div>   
+        <div class="input-field col s12">
+            <button type="button" id="submitNamesButton" onclick="enterSubmitNames()" class="standard waves-effect waves-light btn"><i class="material-icons left">send</i>Submit Names</button>
+        </div>
+     
+    </div>
+  </section>
+
+  <div id="wikiNameModal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4 id="wikiFullName"></h4>
+    <iframe id="wiki" style="height:100%; width:100%; border:none"></iframe>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="waves-effect waves-orange btn-flat" style="float:left" onclick="getRandomWikiName()">Pick another</a>
+      <a href="#!" class="modal-close waves-effect waves-teal btn-flat">Add name</a>
+    </div>
+  </div>
+
+  
+  <!--*******************
+END GAME BUTTONS AND CONFIRMS
+**********************-->
+        
+   <!-- Modal Trigger -->
+  <button id="endGameTrigger" style="display:none" class="btn-floating btn-small endGameTrigger red waves-effect waves-light modal-trigger" data-target="endGame"><i class="material-icons">clear</i></button>
+ 
+  <!-- Modal Structure -->
+  <div id="endGame" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>End Game</h4>
+      <p>You are about to deactivate the <span id="endGameSession"></span> session.</p>
+      <p>This will remove access to the session, and all information, for you and all players</p>
+      <p>Are you sure you want to deactivate the session?</p>
+    </div>
+    <div class="modal-footer">
+      <button href="#!" class="modal-close waves-effect grey lighten-3 waves-teal  btn-flat">Cancel</button>
+      <button href="#!" onclick="endGame()" class="modal-close waves-effect red waves-red btn-flat">Deactivate</button>
+    </div>
+  </div>     
+
+<!--**********************************-->
+ 
+</main>
+<footer>
+ <button id="install-prompt" style="display:none">
+        Add to home screen
+      </button>
+</footer>
+</div>
+
+<script src="scripts/main.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>             
+<script>
+  
+ //initializes Materialize chips
+    $('.chips-placeholder').chips({
+    placeholder: 'Add player names',
+    secondaryPlaceholder: '+players',
+  });
+    
+  //initializes Materialize Modals
+    $(document).ready(function(){
+    $('.modal').modal();
+  });
+      
+  </script>
+</body>
+
+</html>

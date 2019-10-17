@@ -1,24 +1,30 @@
 {
-  "name": "dreams-pwa",
-  "version": "0.0.1",
-  "description": "A simple PWA built with Workbox and Express, instantly up and running.",
-  "main": "server.js",
-  "scripts": {
-    "start": "workbox generateSW && node server.js"
-  },
+  "name": "firebase-database-quickstart",
+  "version": "1.0.0",
+  "description": "Firebase Node.js Database Quickstart Sample",
+  "main": "index.js",
+  "author": "nivco@google.com",
+  "license": "Apache-2.0",
   "dependencies": {
-    "express": "^4.16.4",
-    "workbox-cli": "^3.6.3"
+    "escape-html": "^1.0.3",
+    "firebase": "^3.0.0",
+    "node-schedule": "^1.1.0",
+    "nodemailer": "^2.4.1",
+    "promise": "^7.1.1",
+    "express": "*"
   },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/pwa-starter"
-  },
-  "license": "MIT",
-  "keywords": [
-    "node",
-    "glitch",
-    "express",
-    "workbox",
-    "pwa"
-  ]
+	"scripts": {
+	"start": "node index.js"
+	},
+	"engines": {
+		"node": "6.x"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/firebase/quickstart-nodejs"
+	},
+	"keywords": [
+		"node",
+		"firebase"
+	]
 }
