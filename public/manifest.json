@@ -1,0 +1,20 @@
+{
+  "short_name": "Dreams PWA",
+  "name": "Glitch Dreams PWA",
+  "theme_color": "#fff",
+  "background_color": "#fff",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.com/b9058807-d525-4785-aab6-5a803d28702b%2Fpwa-192x192.png?1546472405312",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn.glitch.com/b9058807-d525-4785-aab6-5a803d28702b%2Fpwa-512x512.png?1546472405576",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "start_url": "/"
+}

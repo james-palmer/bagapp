@@ -1,0 +1,24 @@
+{
+  "name": "dreams-pwa",
+  "version": "0.0.1",
+  "description": "A simple PWA built with Workbox and Express, instantly up and running.",
+  "main": "server.js",
+  "scripts": {
+    "start": "workbox generateSW && node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "workbox-cli": "^3.6.3"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/pwa-starter"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express",
+    "workbox",
+    "pwa"
+  ]
+}
