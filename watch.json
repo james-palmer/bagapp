@@ -1,0 +1,21 @@
+{
+  "install": {
+    "include": [
+      "^package\\.json$",
+      "^\\.env$"
+    ]
+  },
+  "restart": {
+    "exclude": [
+      "^dist/",
+      "^swdist/"
+    ],
+    "include": [
+      "^public/",
+      "\\.js$",
+      "\\.coffee$",
+      "\\.json"
+    ]
+  },
+  "throttle": 100
+}
