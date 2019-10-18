@@ -1,24 +1,3 @@
-if (location.protocol != 'https:')
-{
- location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
- console.log("redirected to HTTPS")
-}
-
-// Shortcuts to DOM Elements.
-var messageForm = document.getElementById('message-form');
-var messageInput = document.getElementById('new-post-message');
-var titleInput = document.getElementById('new-post-title');
-var signInButton = document.getElementById('sign-in-button');
-var signOutButton = document.getElementById('sign-out-button');
-var splashPage = document.getElementById('page-splash');
-var addPost = document.getElementById('add-post');
-var addButton = document.getElementById('add');
-var recentPostsSection = document.getElementById('recent-posts-list');
-var userPostsSection = document.getElementById('user-posts-list');
-var topUserPostsSection = document.getElementById('top-user-posts-list');
-var recentMenuButton = document.getElementById('menu-recent');
-var myPostsMenuButton = document.getElementById('menu-my-posts');
-var myTopPostsMenuButton = document.getElementById('menu-my-top-posts');
 var listeningFirebaseRefs = [];
 
 //JP Var
@@ -45,7 +24,6 @@ var homeRoundButton = document.getElementById('homeRoundButton');
 
 //Elements
 var selectSession = document.getElementById("selectSession");
-
 
 // Firstore
 var db = firebase.firestore();  
@@ -171,6 +149,26 @@ window.addEventListener('load', function() {
 */
   // Listen for auth state changes
   firebase.auth().onAuthStateChanged(onAuthStateChanged);
+  
+  firebase.auth().signInAnonymously().catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});
+  
+  firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    // ...
+  } else {
+    // User is signed out.
+    // ...
+  }
+  // ...
+});
 
  // Bind menu buttons.
   menuHome.onclick = function() {showSection(homeScreen, menuHome);showHomeScreenDetails();};
@@ -223,8 +221,8 @@ function bmLogOut(){
   document.getElementById("roundEnd-splash").style.display = "none";
   document.getElementById("enterScreen").style.display = "none";
   document.getElementById('setupCreateGameSessionButton').disabled = false;
-  document.getElementById('submitNamesButton').disabled = false;  
-    document.getElementById('enterNameFour').style.display ="block";
+  document.getElementById('submitNamesButton').disabled = true;  
+  document.getElementById('enterNameFour').style.display ="block";
     document.getElementById('enterNameFive').style.display ="block";
     document.getElementById('enterNameSix').style.display ="block";
     document.getElementById('enterNameSeven').style.display ="block";
@@ -1042,8 +1040,6 @@ var targetName
 var wikiName
 var wikiLink
 
-function enterSubmitNames() {
-
 var bagName1 = document.getElementById('enterNameOne').value;
 var bagName2 = document.getElementById('enterNameTwo').value;
 var bagName3 = document.getElementById('enterNameThree').value;
@@ -1054,6 +1050,9 @@ var bagName7 = document.getElementById('enterNameSeven').value;
 var bagName8 = document.getElementById('enterNameEight').value;
 var bagName9 = document.getElementById('enterNameNine').value;
 var bagName10 = document.getElementById('enterNameTen').value;
+
+function enterSubmitNames() {
+
 var bagNamesEntered= [bagName1,bagName2,bagName3,bagName4,bagName5,bagName6,bagName7,bagName8,bagName9,bagName10]  
 var nameId
 
@@ -1233,6 +1232,49 @@ function hideAllWiki(){
   }
 
 
+var namesInputSoFar
+function countNamesEntered(){
+
+if (document.getElementById('enterNameTen').value.length > 0){
+  namesInputSoFar = 10 }
+
+else if (document.getElementById('enterNameNine').value.length > 0){
+  namesInputSoFar = 9 }
+
+else if (document.getElementById('enterNameEight').value.length > 0){
+  namesInputSoFar = 8 }
+
+else if (document.getElementById('enterNameSeven').value.length > 0){
+  namesInputSoFar = 7 }
+
+else if (document.getElementById('enterNameSix').value.length > 0){
+  namesInputSoFar = 6 }
+
+else if (document.getElementById('enterNameFive').value.length > 0){
+  namesInputSoFar = 5 }
+
+else if (document.getElementById('enterNameFour').value.length > 0){
+  namesInputSoFar = 4 }
+
+else if (document.getElementById('enterNameThree').value.length > 0){
+  namesInputSoFar = 3 }
+
+else if (document.getElementById('enterNameTwo').value.length > 0){
+  namesInputSoFar = 2 }
+
+else if (document.getElementById('enterNameOne').value.length > 0){
+  namesInputSoFar = 1 }
+
+else {namesInputSoFar = 0}
+
+if (namesInputSoFar == namesPerPlayer){
+  document.getElementById('submitNamesButton').disabled = false;
+  console.log("YES")
+}
+
+  console.log(namesInputSoFar+"input")
+    console.log(namesPerPlayer+"req")
+}
 //************************************************
 //GAME SCREEN FUNCTIONs
 //*************************************************

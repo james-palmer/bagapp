@@ -39,9 +39,13 @@
     <meta name="theme-color" content="#009688">
     <link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
     <link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571355085314">
-   <!-- register service worker 
+   <!-- register service worker -->
   <script src="register-sw.js" defer></script>
--->
+<script> if (location.protocol != 'https:')
+{
+ location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+ console.log("redirected to HTTPS")
+}</script>
   
   <link rel="stylesheet" href="main.css">
 
@@ -74,7 +78,8 @@
 <div id="header">
   <header> 
   <div class="mdl-layout__header-row titlebar teal">
-       <h3>BAG MINGE</h3><sup><h9>  BETA</h9></sup>
+      <img alt="logo" style="width:26px; height:26px; margin: 5px" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785">
+   <h3>BAG MINGE</h3>
     <a class="btn-floating btn-small waves-effect waves-light logoutLblPos" onclick="bmLogOut();"><i class="material-icons">exit_to_app</i></a>
     <a class="loginName" id="loginName"></a>
     </div>
@@ -99,8 +104,8 @@ Welcome splash screen
     <div align="center" class="container">
     <div class="row">
   <br><br><img alt="logo" style="width:100px; height:100px;" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785">
-  <h1>BAG MINGE</h1><sup>
-      <h9>BETA</h9></sup>
+  <h1>BAG MINGE</h1>
+      <h6>BETA</h6>
         </div>
         <div class="row">
       <button id="join-button" onclick="joinScreen();" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">person_add</i> Join game</button>    
@@ -108,6 +113,7 @@ Welcome splash screen
       <div class="row">
         <button id="create-button" onclick="createScreen()" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect orange"><i class="material-icons">create</i> Create new game</button>
       </div>  
+    </div>
     </section>
   
     <!-- GAME OVER SCREEN
@@ -581,19 +587,19 @@ $(document).ready(function(){$('.tabs').tabs();});
       </div>
       <div class="col s6">
          
-        <input class="nameInput" id="enterNameOne" style="width: 90%" type="text" maxlength="100" placeholder="Name 1" onclick="oneSelect()"><button type="button" style="display:none" id="randomWikiNameButton1" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameTwo" style="width: 90%" type="text" maxlength="100" placeholder="Name 2" onclick="twoSelect()"><button type="button" style="display:none" id="randomWikiNameButton2" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameThree"  style="width: 90%" type="text" maxlength="100" placeholder="Name 3" onclick="threeSelect()"><button type="button" style="display:none" id="randomWikiNameButton3" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameFour" style="width: 90%" type="text" maxlength="100" placeholder="Name 4" onclick="fourSelect()"><button type="button" style="display:none" id="randomWikiNameButton4" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameFive" style="width: 90%" type="text" maxlength="100" placeholder="Name 5" onclick="fiveSelect()"><button type="button" style="display:none" id="randomWikiNameButton5" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameSix" style="width: 90%" type="text" maxlength="100" placeholder="Name 6" onclick="sixSelect()"><button type="button" style="display:none" id="randomWikiNameButton6" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameSeven" style="width: 90%" type="text" maxlength="100" placeholder="Name 7" onclick="sevenSelect()"><button type="button" style="display:none" id="randomWikiNameButton7" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameEight" style="width: 90%"  type="text" maxlength="100" placeholder="Name 8" onclick="eightSelect()"><button type="button" style="display:none" id="randomWikiNameButton8" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameNine" style="width: 90%"  type="text" maxlength="100" placeholder="Name 9" onclick="nineSelect()"><button type="button" style="display:none" id="randomWikiNameButton9" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
-        <input class="nameInput" id="enterNameTen" style="width: 90%" type="text" maxlength="100" placeholder="Name 10" onclick="tenSelect()"><button type="button" style="display:none" id="randomWikiNameButton10" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameOne" style="width: 90%" type="text" maxlength="100" placeholder="Name 1" onclick="oneSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton1" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameTwo" style="width: 90%" type="text" maxlength="100" placeholder="Name 2" onclick="twoSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton2" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameThree"  style="width: 90%" type="text" maxlength="100" placeholder="Name 3" onclick="threeSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton3" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameFour" style="width: 90%" type="text" maxlength="100" placeholder="Name 4" onclick="fourSelect();" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton4" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameFive" style="width: 90%" type="text" maxlength="100" placeholder="Name 5" onclick="fiveSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton5" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameSix" style="width: 90%" type="text" maxlength="100" placeholder="Name 6" onclick="sixSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton6" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameSeven" style="width: 90%" type="text" maxlength="100" placeholder="Name 7" onclick="sevenSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton7" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameEight" style="width: 90%"  type="text" maxlength="100" placeholder="Name 8" onclick="eightSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton8" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameNine" style="width: 90%"  type="text" maxlength="100" placeholder="Name 9" onclick="nineSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton9" onclick="getRandomWikiName()" class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
+        <input class="nameInput" id="enterNameTen" style="width: 90%" type="text" maxlength="100" placeholder="Name 10" onclick="tenSelect()" onchange="countNamesEntered();"><button type="button" style="display:none" id="randomWikiNameButton10" onclick="getRandomWikiName()"  class="wikiName modal-trigger" data-target="wikiNameModal"><i class="material-icons">youtube_searched_for</i></button>
       </div>   
         <div class="input-field col s12">
-            <button type="button" id="submitNamesButton" onclick="enterSubmitNames()" class="standard waves-effect waves-light btn"><i class="material-icons left">send</i>Submit Names</button>
+            <button type="button" disabled id="submitNamesButton" onclick="enterSubmitNames()" class="standard waves-effect waves-light btn"><i class="material-icons left">send</i>Submit Names</button>
         </div>
      
     </div>
