@@ -1,3 +1,9 @@
+if (location.protocol != 'https:')
+{
+ location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+ console.log("redirected to HTTPS")
+}
+
 // Shortcuts to DOM Elements.
 var messageForm = document.getElementById('message-form');
 var messageInput = document.getElementById('new-post-message');
