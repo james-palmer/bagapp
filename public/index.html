@@ -9,19 +9,19 @@
   <meta name="description" content="James' attempt at bringing game nights to the 21st century">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0">
 <!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-  <title>Bagminge</title>
+  <title>Bag Minge</title>
   <!-- Disable tap highlight on IE -->
   <meta name="msapplication-tap-highlight" content="no">
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="JP">
+  <meta name="application-name" content="Bag Minge">
   <meta name="theme-color" content="#303F9F">
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="JP">
+  <meta name="apple-mobile-web-app-title" content="Bag Minge">
   <meta name="apple-mobile-web-app-status-bar-style" content="#303F9F">
 
   <!-- Tile icon for Win8 -->
@@ -74,7 +74,7 @@
 <div id="header">
   <header> 
   <div class="mdl-layout__header-row titlebar teal">
-       <h3>BAGMINGE</h3><sup><h9>  BETA</h9></sup>
+       <h3>BAG MINGE</h3><sup><h9>  BETA</h9></sup>
     <a class="btn-floating btn-small waves-effect waves-light logoutLblPos" onclick="bmLogOut();"><i class="material-icons">exit_to_app</i></a>
     <a class="loginName" id="loginName"></a>
     </div>
@@ -97,18 +97,18 @@ Welcome splash screen
 **************************-->
   <section id="page-splash" style="display:block">
     <div align="center" class="container">
-    <h1></h1>
-      <!-- <h1>BAGMINGE</h1>  -->    
-<div>
-      <button id="join-button" onclick="joinScreen();" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">person_add</i> Join game</button>
-    </div>
+    <div class="row">
+  <br><br><img alt="logo" style="width:100px; height:100px;" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785">
+  <h1>BAG MINGE</h1><sup>
+      <h9>BETA</h9></sup>
+        </div>
+        <div class="row">
+      <button id="join-button" onclick="joinScreen();" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">person_add</i> Join game</button>    
+      </div>  
       <div class="row">
-        <div>
-     <p></p> <button id="create-button" onclick="createScreen()" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect orange"><i class="material-icons">create</i> Create new game</button>
-    </div>   
-      </div>      
-   </div>
-      </section>
+        <button id="create-button" onclick="createScreen()" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect orange"><i class="material-icons">create</i> Create new game</button>
+      </div>  
+    </section>
   
     <!-- GAME OVER SCREEN
 **************************-->

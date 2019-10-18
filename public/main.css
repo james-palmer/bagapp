@@ -394,19 +394,19 @@ h3 {
 #join-button {
     margin-left: 10px;
     color: inherit;
-    width: 60%;
+    width: 80%;
     height: 100px;
     vertical-align: middle;
-    top:80pt;
+    top:20pt;
     background-color: teal;
 }
 #create-button {
     margin-left: 10px;
     color: inherit;
-    width: 60%;
+    width: 80%;
     height: 100px;
     vertical-align: middle;
-    top:80pt;
+    top:20pt;
     background-color:;
 }
 

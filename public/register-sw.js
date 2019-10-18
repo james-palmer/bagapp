@@ -1,7 +1,7 @@
 // redirect to secure connection
 location.protocol === 'http:' && (location.protocol = 'https:');
 
-// check if service workers are available
+/*/ check if service workers are available
 if ('serviceWorker' in navigator) {
   // register the service worker
   window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
@@ -13,3 +13,4 @@ if ('serviceWorker' in navigator) {
     prompt.onclick = () => e.prompt();
   });
 }
+*/
