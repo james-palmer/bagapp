@@ -264,6 +264,7 @@ function createScreen() {
   document.getElementById("header").style.display = "block";
 $('#createSelectTeamNumber').not('.disabled').formSelect();
 $('#createNameCount').not('.disabled').formSelect();  
+window.navigator.vibrate(200);
 };
 
 function joinScreen(){
@@ -736,6 +737,11 @@ function showHomeScreenDetails(){
             enableNavBarButtons();
             document.getElementById("homeStartButton").style.display = "block";
             document.getElementById("menu-start").style.display = "block";
+        
+        //play sound and vibrate 
+        document.getElementById('notificationSound').play();
+        window.navigator.vibrate(200);
+        
      } else if (currentPlayer !== playerPicked) {
             document.getElementById("homeStartButton").style.display = "none";
             document.getElementById("menu-start").style.display = "none";        
@@ -1040,6 +1046,7 @@ var targetName
 var wikiName
 var wikiLink
 
+function enterSubmitNames() {
 var bagName1 = document.getElementById('enterNameOne').value;
 var bagName2 = document.getElementById('enterNameTwo').value;
 var bagName3 = document.getElementById('enterNameThree').value;
@@ -1050,15 +1057,13 @@ var bagName7 = document.getElementById('enterNameSeven').value;
 var bagName8 = document.getElementById('enterNameEight').value;
 var bagName9 = document.getElementById('enterNameNine').value;
 var bagName10 = document.getElementById('enterNameTen').value;
-
-function enterSubmitNames() {
-
+              
 var bagNamesEntered= [bagName1,bagName2,bagName3,bagName4,bagName5,bagName6,bagName7,bagName8,bagName9,bagName10]  
 var nameId
 
 
 //get current count of names
-     db.collection("names").doc("ID").get().then(function(doc) {
+db.collection("names").doc("ID").get().then(function(doc) {
 if (doc.exists) {  } else {
   db.collection("names").doc("ID").set({count: 1}).then(function() {console.log("ID Updated");
 }).catch(function(error) {console.error("Error writing document: ", error);});   
@@ -1082,7 +1087,7 @@ var nameId10 = nameId + 10
 db.collection("names").doc("ID").update({count: increaseByNPP}).then(function() {console.log("ID Updated");
 }).catch(function(error) {console.error("Error writing document: ", error);});      
        
-db.collection("names").doc(nameId1.toString()).set({bagName: bagName1,submittedBy: playerPicked, sessionName: sessionPicked, round: 1}).then(function() {console.log("Name 1 successfully written: "+bagName1);
+db.collection("names").doc(nameId1.toString()).set({bagName: bagName1, submittedBy: playerPicked, sessionName: sessionPicked, round: 1}).then(function() {console.log("Name 1 successfully written: "+bagName1);
 }).catch(function(error) {console.error("Error writing document: ", error);});
 
   
@@ -1203,6 +1208,7 @@ makeSPARQLQuery( endpointUrl, sparqlQuery, function( data ) {
    document.getElementById(targetName).value = wikiName
   document.getElementById('wiki').src = wikiLink;
   document.getElementById('wikiFullName').innerhtml = wikiName
+  countNamesEntered();
   })
 
 }
@@ -1365,6 +1371,7 @@ var tickTock = setInterval(function () {
     
     if (timer==0){
       clearInterval(tickTock)
+      document.getElementById('countdownClockMP3').play()
       endRoundWithNamesLeft();
          } else if (bagNames.length == 0) {  
           //new screen here for if you guess all names before time's up
