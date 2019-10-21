@@ -25,13 +25,14 @@ var homeRoundButton = document.getElementById('homeRoundButton');
 //Elements
 var selectSession = document.getElementById("selectSession");
 
-// Firstore
+// Firestore
 var db = firebase.firestore();  
 var sessions = db.collection('sessions');
 var names = db.collection('names');
 var teams = db.collection('teams');
 var increaseBy = firebase.firestore.FieldValue.increment(1);
 
+var wordCloudNames = []
 
 // Selected variables
 var activeSessions = [];
@@ -183,6 +184,7 @@ window.addEventListener('load', function() {
   homeScoresButton.onclick = function() {showScoresScreen();};
   homeRoundButton.onclick = function()  {showRoundScreen();}; 
   
+  getWordCloudNames();
   
   }, false);
 
@@ -211,6 +213,58 @@ function showSection(sectionElement, buttonElement) {
 //*******************************************
 // Welcome Screen Functions
 //******************************************
+
+
+
+function getWordCloudNames(){
+ wordCloudNames = [];
+ db.collection("names").get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {wordCloudNames.push(doc.data().bagName); });
+   shuffle(wordCloudNames)
+   
+    document.getElementById("wordCloudNames").innerHTML = wordCloudNames.join(''); 
+    });
+};
+
+
+function delSess(sess){
+
+//Delete names entered into session
+  var namesToDelete = db.collection('names').where('sessionName','==',sess);
+namesToDelete.get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {
+    doc.ref.delete();
+   });
+  console.log(sess+" names deleted")
+}).catch(function(error) {console.log("Error getting document:", error);}); ;  
+  
+//Delete players in session
+var playersToDelete = db.collection('players').where('sessionName','==',sess);
+playersToDelete.get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {
+    doc.ref.delete();
+   });
+  console.log(sess+" players deleted")
+}).catch(function(error) {console.log("Error getting document:", error);}); ;  
+
+//Delete teams
+  var teamsToDelete = db.collection('teams').where('sessionName','==',sess);
+teamsToDelete.get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {
+    doc.ref.delete();
+   });
+  console.log(sess+" teams deleted")
+}).catch(function(error) {console.log("Error getting document:", error);}); ;  
+
+//Delete session
+db.collection("sessions").doc(sess).delete().then(function() {
+    console.log("Session successfully deleted!");
+}).catch(function(error) {
+    console.error("Error deleting session: ", error);
+});
+
+}
+
 function bmLogOut(){
   document.getElementById("waitScreen").style.display = "none";
   document.getElementById("createScreen").style.display = "none";
@@ -256,11 +310,13 @@ function bmLogOut(){
   document.getElementById("endGameTrigger").style.display = "none"; 
   
   document.getElementById("page-splash").style.display = "block";
+  document.getElementById("wordCloud").style.display = "block";
 }
 
 function createScreen() {
   document.getElementById("createScreen").style.display = "block";
   document.getElementById("page-splash").style.display = "none";
+  document.getElementById("wordCloud").style.display = "none";
   document.getElementById("header").style.display = "block";
 $('#createSelectTeamNumber').not('.disabled').formSelect();
 $('#createNameCount').not('.disabled').formSelect();  
@@ -270,6 +326,7 @@ window.navigator.vibrate(200);
 function joinScreen(){
 getActiveSessions();
 document.getElementById("page-splash").style.display = "none";
+document.getElementById("wordCloud").style.display = "none";
 document.getElementById("joinScreen").style.display = "block";
 document.getElementById("header").style.display = "block";  
 };
@@ -676,6 +733,7 @@ joinGame();
 // create new game back button to start page
 function createBack() {
   document.getElementById("page-splash").style.display = "block";
+  document.getElementById("wordCloud").style.display = "block";
   document.getElementById("createScreen").style.display = "none";
 }  
 
@@ -1291,6 +1349,7 @@ function getBagNames(){
    console.log([bagNames])
  });
 };
+
 
 function getStartInfo () {
   getRoundTime();   

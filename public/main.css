@@ -337,7 +337,8 @@ h3 {
 
 #wordCloud p {
    font-size: 22px;
-}
+  word-wrap: break-word;
+ }
 
 #splashLogo{
  transform: rotate(-30deg);
