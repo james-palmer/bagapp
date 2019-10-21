@@ -35,7 +35,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#009688">
     <link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
-    <link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fd637bbb1-7017-46dd-a482-815e79dd4d96.image.png?v=1571371972786">
+    <link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571620647545">
    <!-- register service worker -->
   <script src="register-sw.js" defer></script>
 <script> if (location.protocol != 'https:')
@@ -119,11 +119,13 @@ Welcome splash screen
       </div>  
       <div class="row">
         <button id="create-button" onclick="createScreen()" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect orange"><i class="material-icons">create</i> Create new game</button>
-        <br><br><img  id="splashLogo" alt="logo" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785">
-
-      </div>  
+         </div>  
     </div>
+    <img  id="splashLogo" alt="logo" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fshopping-bag%20(1).png?v=1571619765796">
     </section>
+
+  
+ 
   
     <!-- GAME OVER SCREEN
 **************************-->
@@ -142,7 +144,9 @@ create new game screen
 <section id="createScreen" style="display:none">
     <div class="container">
       <a onclick="createBack()" class="btn-floating backbutton btn-small waves-effect waves-light"><i class="material-icons">chevron_left</i></a>
-        <div class="row input-field col s12 m6">
+       <br>  
+      <div class="row input-field col s12 m6">
+         
             <input id="setupSessionName" type="text" maxlength="100" placeholder="Give your session a recognizable name">
           <label>Session Name:</label>
         </div>
@@ -186,7 +190,7 @@ create new game screen
   <form action="#">
     <p class="range-field inline">
     <label>How many seconds for each turn?</label>
-      <input type="range" id="timePicked" min="20" max="100" value="60" step="5"/>
+      <input type="range" id="timePicked" min="20" max="100" value="45" step="5"/>
     </p>
   </form>
     <div>
@@ -568,14 +572,32 @@ $(document).ready(function(){$('.tabs').tabs();});
       <p>When the timer runs out, it's on to the next team to guess. The next player to draw from the bag will be shown on the home screen and the start turn button will be available for them to start their turn</p>
       <p>If there are no names left in the bag, the round ends but your time gets carried over to the next round</p>
       <p>At the end of the 3rd round, the team with the most names guessed wins! </p>
-      <hr><p><b>Round 1</b>
+      
+      <hr>
+      
+      <p><b>Round 1</b>
       <p>Articulate the name in as many words as you like without mentioning the name itself, "sounds like" or "rhymes with"</p>
-      </p><hr><p><b>Round 2</b>
-      <p>Give a 1 word clue for the name; hint - the names are the same as in round 1 so use that for some inspiration. Once you've said your word, you're committed, no going back!</p>
-      </p><hr><p><b>Round 3</b>
+      </p>
+    
+      <hr>
+    
+    <p><b>Round 2</b>
+    
+    <p>Give a 1 word clue for the name; hint - the names are the same as in round 1 so use that for some inspiration. Once you've said your word, you're committed, no going back!</p>
+     </p>
+  
+    <hr>
+  
+    <p><b>Round 3</b>
       <p>Act out the name; good old fashioned charades. Remember, the names are still the same!</p>
-      </p><hr><p>Once all of the names are guessed at the end of round 3, the scores are tallied and the winner announced!</p>    
-    </div>
+      </p>
+  
+    <hr>
+  
+    <p>Once all of the names are guessed at the end of round 3, the scores are tallied and the winner announced!</p>    
+    
+  </div>
+  
     <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-teal btn-flat">Got it!</a>
     </div>
@@ -615,16 +637,32 @@ $(document).ready(function(){$('.tabs').tabs();});
   </section>
 
   <div id="wikiNameModal" class="modal modal-fixed-footer">
-    <div class="modal-content">
-      <h4 id="wikiFullName"></h4>
-    <iframe id="wiki" style="height:100%; width:100%; border:none"></iframe>
+    <div class="modal-content" style="align:center">
+   
+     <i id="wikiClose" href="#!" class="modal-close material-icons waves-effect waves-red">highlight_off</i>  
+    <iframe id="wiki" style="border:none"></iframe>
+    
+    <div id="wikiWait" class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-teal-only">
+             <div class="circle-clipper left">
+            <div class="circle"></div>
+        </div><div class="gap-patch">
+        <div class="circle"></div>
+       </div><div class="circle-clipper right">
+        <div class="circle"></div>
+       </div>
+      </div>
+     </div> 
+      
+      
     </div>
-    <div class="modal-footer">
+      <div class="modal-footer">
       <a href="#!" class="waves-effect waves-orange btn-flat" style="float:left" onclick="getRandomWikiName()">Pick another</a>
-      <a href="#!" class="modal-close waves-effect waves-teal btn-flat">Add name</a>
-    </div>
+      <a href="#!" class="modal-close waves-effect waves-teal btn-flat" onclick="addRandomWikiName()">Add name</a>
+      
+      </div>
   </div>
-
+  
   
   <!--*******************
 END GAME BUTTONS AND CONFIRMS
