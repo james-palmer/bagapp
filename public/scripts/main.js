@@ -222,7 +222,7 @@ function getWordCloudNames(){
   querySnapshot.forEach(function(doc) {wordCloudNames.push(doc.data().bagName); });
    shuffle(wordCloudNames)
    
-    document.getElementById("wordCloudNames").innerHTML = wordCloudNames.join(''); 
+    document.getElementById("wordCloudNames").innerHTML = wordCloudNames.join(' '); 
     });
 };
 
@@ -1230,6 +1230,10 @@ var values = json.map(function (e) {
 
 function getRandomWikiName(){
 
+  document.getElementById('wikiWait').style.display= 'block';
+  document.getElementById('wiki').style.display= 'none';
+
+  
 function makeSPARQLQuery( endpointUrl, sparqlQuery, doneCallback ) {
 	var settings = {
 		headers: { Accept: 'application/sparql-results+json' },
@@ -1263,13 +1267,19 @@ makeSPARQLQuery( endpointUrl, sparqlQuery, function( data ) {
   wikiLink = data.results.bindings[0].wikipedia_article.value
 }
 ).then(function(){
-   document.getElementById(targetName).value = wikiName
+  document.getElementById('wikiWait').style.display= 'none';
+  document.getElementById('wiki').style.display= 'block';
   document.getElementById('wiki').src = wikiLink;
-  document.getElementById('wikiFullName').innerhtml = wikiName
-  countNamesEntered();
   })
-
 }
+
+function addRandomWikiName(){
+  document.getElementById(targetName).value = wikiName
+  document.getElementById('wiki').src = "";
+  countNamesEntered();
+}
+
+
 
 function oneSelect(){hideAllWiki(); document.getElementById("randomWikiNameButton1").style.display = "block"; targetName = 'enterNameOne';}
 function twoSelect(){hideAllWiki(); document.getElementById("randomWikiNameButton2").style.display = "block"; targetName = 'enterNameTwo';}
@@ -1297,6 +1307,7 @@ function hideAllWiki(){
 
 
 var namesInputSoFar
+
 function countNamesEntered(){
 
 if (document.getElementById('enterNameTen').value.length > 0){
@@ -1335,9 +1346,9 @@ if (namesInputSoFar == namesPerPlayer){
   document.getElementById('submitNamesButton').disabled = false;
   console.log("YES")
 }
-
   console.log(namesInputSoFar+"input")
-    console.log(namesPerPlayer+"req")
+  console.log(namesPerPlayer+"req")
+  
 }
 //************************************************
 //GAME SCREEN FUNCTIONs
