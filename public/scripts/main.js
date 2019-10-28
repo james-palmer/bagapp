@@ -1,6 +1,7 @@
 var listeningFirebaseRefs = [];
 
 //JP Var
+
 //Nav buttons
 var menuHome = document.getElementById('menu-goHome');
 var menuStart = document.getElementById('menu-start');
@@ -43,6 +44,15 @@ var playerPicked;
 var teamPicked;
 var sessionPicked;
 var namesPerPlayer
+
+var gameStarted
+
+    var playerScores= []
+    var playerScore
+    var orderedPlayerNames = []
+    var playerName
+    var playerTurns
+    var avgScore
 
 var activeTeamOne;
 var activeTeamTwo;
@@ -173,18 +183,22 @@ window.addEventListener('load', function() {
 
  // Bind menu buttons.
   menuHome.onclick = function() {showSection(homeScreen, menuHome);showHomeScreenDetails();};
-  menuStart.onclick = function() {getStartInfo();};
+  menuStart.onclick = function() {getStartInfo(); hideAlert();};
   menuTeams.onclick = function() {showTeamScreen();};
   menuScores.onclick = function() {showScoresScreen();};
   menuRound.onclick = function() {showRoundScreen();};
     
    // Bind home screen buttons.
-  homeStartButton.onclick = function() {getStartInfo();};
+  homeStartButton.onclick = function() {getStartInfo(); hideAlert();};
   homeTeamsButton.onclick = function() {showTeamScreen();};
   homeScoresButton.onclick = function() {showScoresScreen();};
   homeRoundButton.onclick = function()  {showRoundScreen();}; 
   
-  getWordCloudNames();
+  
+  //********************************************
+  //  Switch on/off the dynamic words in splash background
+      //getWordCloudNames();
+  //********************************************  
   
   }, false);
 
@@ -197,6 +211,11 @@ function showSection(sectionElement, buttonElement) {
   teamsScreen.style.display = "none";
   scoresScreen.style.display = 'none';
   roundScreen.style.display = "none";
+  document.getElementById('scoreboard').style.display =  'none';  
+  document.getElementById("roundEnd-splash").style.display = "none" ;
+  document.getElementById("welcomeScreen").style.display = "none";
+
+
   menuHome.classList.remove('is-active');
   menuStart.classList.remove('is-active');
   menuTeams.classList.remove('is-active');
@@ -213,8 +232,6 @@ function showSection(sectionElement, buttonElement) {
 //*******************************************
 // Welcome Screen Functions
 //******************************************
-
-
 
 function getWordCloudNames(){
  wordCloudNames = [];
@@ -301,6 +318,10 @@ function bmLogOut(){
   teamsScreen.style.display = "none";
   scoresScreen.style.display = 'none';
   roundScreen.style.display = "none";
+  
+  document.getElementById("turnAlert").style.display = "none";   
+  document.getElementById("scoreboard").style.display = "none" ;
+  document.getElementById("welcomeScreen").style.display = "none"
   
   document.getElementById("teamThree").style.display = "none"; 
   document.getElementById("teamFour").style.display = "none"; 
@@ -438,7 +459,7 @@ db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1S
 
    if (teamCount == 3) {
       
-      db.collection("sessions").doc(sessName).set({active: true, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 3, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
+      db.collection("sessions").doc(sessName).set({active: true, started: false,turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 3, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
       
       // create team 3
@@ -514,7 +535,7 @@ db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1S
   }
   else if (teamCount == 4) {
         
-      db.collection("sessions").doc(sessName).set({active: true, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 4, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
+      db.collection("sessions").doc(sessName).set({active: true, started: false, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 4, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
       
       // create team 3 and 4
@@ -526,67 +547,67 @@ db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1S
      
     for (var i = 0, len = playerNames.length; i < len; i++) { 
             
-   if (orderNumber == 1){  db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0, sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+   if (orderNumber == 1){  db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0, avgScore: 0, sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                            db.collection("teams").doc(teamOne).update({currentPlayer:playerNames[i], p01:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t1p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                            db.collection("sessions").doc(sessName).update({p01:playerNames[i]}).then(function() {console.log("t1p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); }
       
-      else if (orderNumber == 2){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0, sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 2){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0, avgScore: 0, sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamTwo).update({currentPlayer:playerNames[i], p01:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t2p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p02:playerNames[i]}).then(function() {console.log("t2p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 3){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0, sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 3){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0, sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamThree).update({currentPlayer:playerNames[i], p01:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t3p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p03:playerNames[i]}).then(function() {console.log("t3p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 4){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0, sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 4){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0, sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 1, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamFour).update({currentPlayer:playerNames[i], p01:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t4p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p04:playerNames[i]}).then(function() {console.log("t4p1: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 5){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 5){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamOne).update({p02:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t1p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p05:playerNames[i]}).then(function() {console.log("t2p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 6){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 6){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamTwo).update({p02:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t2p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p06:playerNames[i]}).then(function() {console.log("t2p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 7){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 7){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamThree).update({p02:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t3p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p07:playerNames[i]}).then(function() {console.log("t3p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 8){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 8){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 2, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamFour).update({p02:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t4p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p08:playerNames[i]}).then(function() {console.log("t4p2: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 9){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 9){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamOne).update({p03:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t1p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p09:playerNames[i]}).then(function() {console.log("t1p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 10){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 10){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamTwo).update({p03:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t2p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p10:playerNames[i]}).then(function() {console.log("t2p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 11){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 11){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamThree).update({p03:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t3p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p11:playerNames[i]}).then(function() {console.log("t3p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
      
-      else if (orderNumber == 12){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 12){ db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 3, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamFour).update({p03:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t4p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p12:playerNames[i]}).then(function() {console.log("t4p3: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
      
-      else if (orderNumber == 13){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 13){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamOne, teamOrderNumber: 4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamOne).update({p04:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t1p4 "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p13:playerNames[i]}).then(function() {console.log("t1p4 "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 14){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 14){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamTwo).update({p04:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t2p4 "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p14:playerNames[i]}).then(function() {console.log("t2p4 "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 15){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber:4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 15){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber:4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamThree).update({p04:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t3p4 "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p15:playerNames[i]}).then(function() {console.log("t3p4"+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 16){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber:4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 16){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber:4,orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamFour).update({p04:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t4p4 "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p16:playerNames[i]}).then(function() {console.log("t4p4"+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
      
@@ -594,15 +615,15 @@ db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1S
                                   db.collection("teams").doc(teamOne).update({p05:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t1p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p17:playerNames[i]}).then(function() {console.log("t1p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 18){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 5, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 18){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamTwo, teamOrderNumber: 5, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamTwo).update({p05:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t2p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p18:playerNames[i]}).then(function() {console.log("t2p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
       
-      else if (orderNumber == 19){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 5, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 19){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamThree, teamOrderNumber: 5, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamThree).update({p05:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t3p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p19:playerNames[i]}).then(function() {console.log("t3p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
      
-      else if (orderNumber == 20){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 5, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
+      else if (orderNumber == 20){db.collection("players").doc(playerNames[i]).set({score: 0, turns: 0,avgScore: 0,sessionName: sessName, hasEnteredNames: false, team:teamFour, teamOrderNumber: 5, orderNumber: orderNumber}).then(function() {console.log("Player created: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); 
                                   db.collection("teams").doc(teamFour).update({p05:playerNames[i], teamSize: increaseBy}).then(function() {console.log("t4p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);});
                                   db.collection("sessions").doc(sessName).update({p20:playerNames[i]}).then(function() {console.log("t4p5: "+playerNames[i]);}).catch(function(error) {console.error("Error writing document: ", error);}); } 
 
@@ -611,7 +632,7 @@ db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1S
       };
     }  else {
     //********* 2 team game  ************
-      db.collection("sessions").doc(sessName).set({active: true, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 2, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
+      db.collection("sessions").doc(sessName).set({active: true, started: false, turnActive: false, namesPerPlayer: namesPerPlayer, numberOfPlayers: countNumberPlayers, numberOfPlayersEntered: 0, numberOfTeams: 2, lastNameGuessed: "None guessed yet" , currentRound: 1, currentTeam: currentTeam, currentPlayer: currentPlayer, currentPlayerNumber : currentPlayerNumber, currentScore: 0, roundTimeDefault: timePicked, roundTime: timePicked, p01:"", p02:"", p03:"", p04:"", p05:"", p06:"", p07:"", p08:"", p09:"", p10:"", p11:"", p12:"", p13:"", p14:"", p15:"", p16:"", p17:"", p18:"", p19:"", p20:""}).then(function() {console.log("Session successfully created!");
     }).catch(function(error) {console.error("Error writing document: ", error);}); 
     //iterate through names and add to players to the DB
       for (var i = 0, len = playerNames.length; i < len; i++) { 
@@ -764,7 +785,13 @@ function joinGame(){
   document.getElementById("enterSessionPicked").innerHTML = sessionPicked;
   document.getElementById('startShowPlayer').innerHTML = playerPicked;
   document.getElementById("loginName").innerHTML = playerPicked;
+  document.getElementById("welcomeSession").innerHTML = sessionPicked;
+  document.getElementById('welcomePlayer').innerHTML = playerPicked;
+  
   hasUserEnteredNames();
+  
+
+    
 }
 
 function showHomeScreenDetails(){
@@ -774,7 +801,7 @@ function showHomeScreenDetails(){
       currentPlayer = doc.data().currentPlayer; 
       currentTeam = doc.data().currentTeam;
       currentRound = doc.data().currentRound;
-     turnActive = doc.data().turnActive
+      turnActive = doc.data().turnActive
         document.getElementById('showNextPlayer').innerHTML =  currentPlayer;    
         document.getElementById('showNextTeam').innerHTML =  currentTeam
         document.getElementById('showRound').innerHTML =  "Round "+currentRound      
@@ -788,26 +815,67 @@ function showHomeScreenDetails(){
             roundScreen.style.display = "none";         
             showScoresScreen();  
             enableNavBarButtons();
+             document.getElementById("roundEnd-splash").style.display = "none" ;
             document.getElementById("homeStartButton").style.display = "none";
-            document.getElementById("menu-start").style.display = "none";  
+            document.getElementById("menu-start").style.display = "none"; 
+            document.getElementById("turnAlert").style.display = "none";     
             menuRound.style.display = "none"
       } else  if (hasEnteredNames == true && currentPlayer == playerPicked && turnActive == false){
             enableNavBarButtons();
             document.getElementById("homeStartButton").style.display = "block";
             document.getElementById("menu-start").style.display = "block";
-        
+            openAlert();    
         //play sound and vibrate 
-        document.getElementById('notificationSound').play();
-        window.navigator.vibrate(200);
         
      } else if (currentPlayer !== playerPicked) {
             document.getElementById("homeStartButton").style.display = "none";
-            document.getElementById("menu-start").style.display = "none";        
+            document.getElementById("menu-start").style.display = "none";      
+            document.getElementById("turnAlert").style.display = "none";     
      }
     
   });  
   
 }
+
+function closeAlert() {  
+  document.getElementById("turnAlert").style.display = "none";          
+  getStartInfo();
+  }
+
+function hideAlert() {  
+  document.getElementById("turnAlert").style.display = "none";          
+  }
+
+  function openAlert() {
+  document.getElementById("turnAlert").style.display = "block";        
+  document.getElementById('notificationSound').play();
+  window.navigator.vibrate(200);
+         
+    // IE8 animation polyfill
+    if ($("html").hasClass("lt-ie9")) {
+      var speed = 300;
+      var times = 3;
+      var loop = setInterval(anim, 300);
+      function anim() {
+        times--;
+        if (times === 0) { clearInterval(loop); }
+        $(".more-ot-alert").animate({ left: 450 }, speed ).animate({ left: 440 }, speed );
+        //.stop( true, true ).fadeIn();
+      };
+      anim();
+    };
+  }
+
+  $(".close-ot-alert").on("click", function () {
+    closeAlert();
+  });
+
+
+  $(document).keydown(function(e) {
+    if (e.keyCode == 27) { closeAlert(); }
+    if (e.keyCode == 67) { openAlert(); } // C is for click?
+  });
+
 
 
 function hasUserEnteredNames() {
@@ -835,17 +903,45 @@ var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false
    document.getElementById("playersYetToEnter").innerHTML = "Players left: "+playersLeftToEnter
    console.log("Players left: ", playersLeftToEnter.join(", "))
    console.log("Count players left to enter: "+playersLeftToEnter.length)
+      
       if (playersLeftToEnter.length == 0) {
-            document.getElementById("waitScreen").style.display = "none";
-            showHomeScreenDetails();
-            showSection(homeScreen, menuHome);
-            enableNavBarButtons();
+  
+       db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
+                if (doc.exists) { gameStarted = doc.data().started;
+                                  var upNextPlayer = doc.data().currentPlayer;
+                                  var upNextTeam = doc.data().currentTeam
+                                  document.getElementById("upNextTeam").innerHTML = upNextTeam;
+                                  document.getElementById("upNextPlayer").innerHTML = upNextPlayer;
+  
+                     
+                   if (gameStarted = true){
+                  document.getElementById("waitScreen").style.display = "none";
+                  document.getElementById("welcomeScreen").style.display = "block"
+                  enableNavBarButtons();
+                  }
+
+                  else {
+                  document.getElementById("waitScreen").style.display = "none";
+                  showSection(homeScreen, menuHome);
+                  enableNavBarButtons();
+                  showHomeScreenDetails();
+                  }
+                                 
+                                 
+                } else {console.log("No such document!");
+              }}).catch(function(error) {console.log("Error getting document:", error);}); 
+
+        
+        
+        
+     
       
       } else {
             document.getElementById("waitScreen").style.display = "block";
       }
   });
 }
+
 
 //When user Joins game - populate session and player functions
 function getActiveSessions () {
@@ -945,6 +1041,8 @@ function getTeamPicked() {
     db.collection("players").doc(playerPicked).get().then(function(doc) {
     if (doc.exists) { teamPicked = doc.data().team;
                      console.log("Team picked: "+teamPicked)
+                     document.getElementById("welcomeTeam").innerHTML = teamPicked;
+  
     } else {console.log("No such document!");
     }}).catch(function(error) {console.log("Error getting document:", error);}); 
 };
@@ -1260,7 +1358,7 @@ var endpointUrl = 'https://query.wikidata.org/sparql',
         "LIMIT 1 OFFSET "+ Math.floor((Math.random() * 100) + 1);
 
 makeSPARQLQuery( endpointUrl, sparqlQuery, function( data ) {
-		$( 'body' ).append( $( '<pre>' ).text( JSON.stringify( data ) ) );
+//		$( 'body' ).append( $( '<pre>' ).text( JSON.stringify( data ) ) );
     console.log(data.results.bindings[0].name.value)
     console.log(data.results.bindings[0].wikipedia_article.value)
   wikiName = data.results.bindings[0].name.value
@@ -1365,6 +1463,15 @@ function getBagNames(){
 function getStartInfo () {
   getRoundTime();   
   showSection(startScreen, menuStart);
+
+     
+  db.collection("players").doc(playerPicked).get().then(function(doc) {
+    if (doc.exists) { playerTurns = doc.data().turns;
+                     console.log("Turns: "+playerTurns);
+                  } else {console.log("No such document!");
+     };
+  });
+  
   document.getElementById("start-splash").style.display = "block"; 
   db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
     if (doc.exists) {currentRound = doc.data().currentRound;
@@ -1372,11 +1479,11 @@ function getStartInfo () {
                      getBagNames();
                      
                   if (currentRound == 1){
-                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 1</h5><hr><p>Articulate the bag name without saying it or a rhyming word</p><p>e.g. for the name James, you can't say 'Rhymes with Games', but you could say 'Rhymes with 'something'-master'!"
+                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 1</h5><hr><p>Describe the bag name that is randomly shown to you for your team to guess.</p><p>You can use as many words as you like without saying the name or a rhyming word</p><p>e.g. for the name James, you can't say 'Rhymes with Games', but you could say 'Rhymes with 'something'-master'!"
                   } else if (currentRound == 2) {
-                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 2</h5><p></p><p>Use <strong>1</strong> word to describe the bag name</p><p>hint: the names are the same as they were in round 1"
+                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 2</h5><p></p><p>Use <strong>ONE</strong> word to describe the bag name that you pull out</p><p>Once you've said a word, there's no going back!</p><p>hint: the names are the same as they were in round 1"
                   } else if (currentRound == 3) {
-                   document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 3</h5><p></p><p>Act out the bag name</p><p>no pointing, grunting or any other verbal "
+                   document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 3</h5><p></p><p>Act out the bag name for your team</p><p>no sound effects, grunting or any other verbal hints or clues allowed!"
                   } else if (currentRound == 4) {
                   document.getElementById('startShowCurrentRound').innerHTML = "<h5>Game Over!</h5>"
                   }
@@ -1399,6 +1506,7 @@ function getRoundTime(){
 };
 
 function startRound() {
+  hideAlert();
   namesGotThisRound = [];
   disableNavBarButtons();
   enableGotItButton();
@@ -1408,20 +1516,20 @@ function startRound() {
   document.getElementById("gameStart").style.display = "block";  
   document.getElementById("start-splash").style.display = "none"; 
   var display = document.querySelector('#gameShowTime');
+  
+  
   startTimer(roundTime, display);
   document.getElementById('gameShowName').innerHTML = bagNames[0]
   
  db.collection('sessions').doc(sessionPicked).update({ turnActive: true, currentPlayer: playerPicked, currentScore: 0 }).then(function() {console.log("Session player logged");
 }).catch(function(error) {console.error("Error updating current player and reset score: ", error);});
-  
-  db.collection('players').doc(playerPicked).update({ turns: increaseBy }).then(function() {console.log("player score increased");
-}).catch(function(error) {console.error("Error updating player Score: ", error);});    
-  
+      
 };
 
 //Start Timer
 function startTimer(duration, display) {
   shuffle(bagNames);
+  turnActive = true;
   console.log(bagNames);
   countNamesLeft = bagNames.length;
     if (countNamesLeft > 1) {
@@ -1646,11 +1754,17 @@ function endRound(){
     db.collection('teams').doc(teamPicked).update({ lastRoundScore: roundScore }).then(function() {console.log("lastRoundScore updated to "+roundScore);
     }).catch(function(error) {console.error("Error updating lastRoundScore: ", error);});  
   
+  
+var  newAvgScore = roundScore / playerTurns
+  
+    db.collection('players').doc(playerPicked).update({ avgScore: newAvgScore}).then(function() {console.log("player Avg score adjusted");
+}).catch(function(error) {console.error("Error updating player Score: ", error);});   
+  
 //show end round splash page
   if (roundScore == 0) {
  document.getElementById('endRoundScore').innerHTML = "You got 0 points! I'd blame your team if I were you..." 
 }  else if (roundScore == 1)
-      document.getElementById('endRoundScore').innerHTML = "You scored 1 point! Tough luck!"
+      document.getElementById('endRoundScore').innerHTML = "You scored 1 point! Not bad...!"
   else {
       document.getElementById('endRoundScore').innerHTML = "You scored "+roundScore+" points, well done!" 
     }
@@ -1675,16 +1789,27 @@ $('li').filter(function(){return $.trim($(this).html()) == '';}).hide()
   
 document.getElementById("roundEnd-splash").style.display = "block" ;
 document.getElementById("gameStart").style.display = "none" ;
-disableNavBarButtons();
+
+updateScores();
+document.getElementById("scoreboard").style.display = "block" ;
+  
+enableNavBarButtons();
+
 };
 
 function endRoundWithTimeLeft(){
       //what to do here when there aren't any names left but still time left
       //increment session round
       if (currentRound == 3) {
-      document.getElementById('endRoundMessage').innerHTML = "Game over!<br><h6>That's it, no names left in this final round<br>Let's tally up the scores!</h6>"
+      document.getElementById('endRoundMessage').innerHTML = "Game over!<br><p>That's it, no names left in this final round<br>Let's tally up the scores and find our winner!</p>"
+        playerTurns = playerTurns + 1
+  console.log(playerTurns)
+  
+  db.collection('players').doc(playerPicked).update({ turns: increaseBy }).then(function() {console.log("player score increased");
+}).catch(function(error) {console.error("Error updating player Score: ", error);});    
+        
       } else {
-      document.getElementById('endRoundMessage').innerHTML = "End of the round!<br><h6> That's it, no names left for this round but it's still your go!<br>let's tally up the scores, then you go again with the time you had left!</h6>"  
+      document.getElementById('endRoundMessage').innerHTML = "End of the round!<br><p> That's it, no names left for this round but it's still your go!<br>let's tally up the scores, then you go again with the time you had left!</p>"  
       };  
       db.collection('sessions').doc(sessionPicked).update({ turnActive: false, currentRound: increaseBy, roundTime: timeLeftOver  }).then(function() {console.log("round end: Session round increased");
       }).catch(function(error) {console.error("Error updating r1Score: ", error);});
@@ -1696,10 +1821,12 @@ function endRoundWithTimeLeft(){
 
 function endRoundWithNamesLeft(){
     //typical end of turn with names left
-    //get default and push to roundTime
+    //get default time and push to roundTime
     document.getElementById('endRoundMessage').innerHTML = "Time's up!"  
 
-
+  playerTurns = playerTurns + 1
+  db.collection('players').doc(playerPicked).update({ turns: increaseBy }).then(function() {console.log("player score increased");
+}).catch(function(error) {console.error("Error updating player Score: ", error);});    
   
      db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
         if (doc.exists) { roundTime = doc.data().roundTimeDefault;
@@ -1707,8 +1834,8 @@ function endRoundWithNamesLeft(){
                         db.collection('sessions').doc(sessionPicked).update({ turnActive: false, roundTime: roundTime }).then(function() {console.log("round end: Session round increased");
                         }).catch(function(error) {console.error("Error updating roundTime: ", error);});                     
         } else {console.log("No such document!");
-         };
-      });
+      };
+    });
   
        var nextPlayer  
        var nextGamePlayer 
@@ -1771,14 +1898,6 @@ function endRoundWithNamesLeft(){
       endRound();  
     };
 
-
-function endRoundNext(){
-  showScoresScreen()
-  enableNavBarButtons();
-  document.getElementById("roundEnd-splash" ).style.display = "none"; 
-}
-
-
 //***********************
 // Game details buttons
 //***********************
@@ -1789,12 +1908,14 @@ showSection(teamsScreen, menuTeams)
 
 function showScoresScreen() {
   showSection(scoresScreen, menuScores)
+  document.getElementById('scoreboard').style.display =  'block';   
   updateScores();
 }
 
 function showRoundScreen() {
   showSection(roundScreen, menuRound)
   liveRoundData();
+
 }
 
 // Game details back buttons
@@ -2177,12 +2298,7 @@ db.collection("teams").doc(activeTeamFour).get().then(function(doc) {if (doc.exi
   }
   */  
 }
-    var playerScores= []
-    var playerScore
-    var orderedPlayerNames = []
-    var playerName
-    var playerTurns
-    var avgScore
+
     
         
 function mVP(){
@@ -2203,7 +2319,7 @@ function mVP(){
     if (playerScores[0]>playerScores[1]){
       document.getElementById('mVP').innerHTML = orderedPlayerNames[0]
       document.getElementById('mVP').innerHTML = orderedPlayerNames[0]
-      document.getElementById('mVPScore').innerHTML = playerScores[0]
+      document.getElementById('mVPScore').innerHTML = playerScores[0]+"/turn"
       console.log("MVP: "+orderedPlayerNames[0]+ " "+playerScores[0]+" per turn") 
       document.getElementById('mVPTag').style.display = "block"
     }
