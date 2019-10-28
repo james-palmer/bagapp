@@ -36,8 +36,25 @@
     <meta name="theme-color" content="#009688">
     <link rel="shortcut icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffavicon-96x96.png?v=1571355103467">
     <link rel="apple-touch-icon" href="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fapple-icon-152x152.png?v=1571620647545">
-   <!-- register service worker -->
-  <script src="register-sw.js" defer></script>
+ 
+ <!-- register service worker -->
+ <!--  <script src="register-sw.js" defer></script>
+  <script src="../public/scripts/NoSleep.min.js"></script>
+  
+  <script>
+      var noSleep = new NoSleep();
+
+   function enableNoSleep() {
+  noSleep.enable();
+  document.removeEventListener('touchstart', enableNoSleep, false);
+  alert("Wake Lock is enabled");
+    }
+     
+  document.addEventListener('touchstart', enableNoSleep, false);
+     
+   </script>
+  -->
+  
 <script> if (location.protocol != 'https:')
 {
  location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
@@ -76,7 +93,7 @@
   <header> 
   <div class="mdl-layout__header-row titlebar teal">
       <img alt="logo" style="width:26px; height:26px; margin: 5px" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fandroid-icon-192x192.png?v=1571355089785">
-   <h3>BAG MINGE</h3>
+   <h3>BAG GAME</h3>
     <a class="btn-floating btn-small waves-effect waves-light logoutLblPos" onclick="bmLogOut();"><i class="material-icons">exit_to_app</i></a>
     <a class="loginName" id="loginName"></a>
     </div>
@@ -103,17 +120,17 @@
 Welcome splash screen 
 **************************-->
   <section id="wordCloud" style="display:block">
- <p id="wordCloudNames">BorisJohnsonScoMoBenStokesHarryKaneIndianaJonesMrPotatoHeadPostmanPatJosephGoebbelsRolfHarrisJamesBondRKellyDannyDyerJamesAndersonKawhiLeonardDeleAlliDonaldTrumpWinstonChurchillGareth'sSisterAndyMurrayJackPhipsonStephenGerrardShaneWarneStephenHawkingRobinHoodMichaelPalinDarrylBraithwaiteJeffBezosAlbertEinsteinJadeGoodySueChessellBorisJohnsonScoMoBenStokesHarryKaneIndianaJonesMrPotatoHeadPostmanPatJosephGoebbelsRolfHarrisJamesBondRKellyDannyDyerJamesAndersonKawhiLeonardDeleAlliDonaldTrumpWinstonChurchillGareth'sSisterAndyMurrayJackPhipsonStephenGerrardShaneWarneStephenHawkingRobinHoodMichaelPalinDarrylBraithwaiteJeffBezosAlbertEinsteinJadeGoodySueChessellBorisJohnsonScoMoBenStokesHarryKaneIndianaJonesMrPotatoHeadPostmanPatJosephGoebbelsRolfHarrisJamesBondRKellyDannyDyerJamesAndersonKawhiLeonardDeleAlliDonaldTrumpWinstonChurchillGareth'sSisterAndyMurrayJackPhipsonStephenGerrardShaneWarneStephenHawkingRobinHoodMichaelPalinDarrylBraithwaiteJeffBezosAlbertEinsteinJadeGoodySueChessellBorisJohnsonScoMoBenStokesHarryKaneIndianaJonesMrPotatoHeadPostmanPatJosephGoebbelsRolfHarrisJamesBondRKellyDannyDyerJamesAndersonKawhiLeonardDeleAlliDonaldTrumpWinstonChurchillGareth'sSisterAndyMurrayJackPhipsonStephenGerrardShaneWarneStephenHawkingRobinHoodMichaelPalinDarrylBraithwaiteJeffBezosAlbertEinsteinJadeGoodySueChessell</p>
+ <p id="wordCloudNames">Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell</p>
   </section>
   
   
   <section id="page-splash" style="display:block">
     <div align="center" class="container">
     <div class="row">
-    <h1>BAG MINGE</h1>
-  
-      <h6>BETA</h6>
+        <div class="titleHeader">
+          <h1>BAG GAME</h1>
         </div>
+      </div>
         <div class="row">
       <button id="join-button" onclick="joinScreen();" class="mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">person_add</i> Join game</button>    
       </div>  
@@ -123,6 +140,8 @@ Welcome splash screen
     </div>
     <img  id="splashLogo" alt="logo" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fshopping-bag%20(1).png?v=1571619765796">
     </section>
+  
+  
 
   
  
@@ -260,7 +279,7 @@ Waiting Screen - while players enter names
   <section id="waitScreen" style="display:none">
     <div align="center" class="container">
     <h1></h1>
-      <h6>Waiting for remaining players to enter names into the bag</h6>
+      <h5>Waiting for remaining players to enter names into the bag</h5>
       <p><br></p>
     <div class="preloader-wrapper big active">
       <div class="spinner-layer spinner-teal-only">
@@ -280,6 +299,34 @@ Waiting Screen - while players enter names
 
 </section>
   
+  
+<!--*****************************    
+Welcome Screen - basic info at the start
+**************************-->  
+<section id="welcomeScreen" style="display: none">
+  <div class="container">
+    <div class="row">
+       <h4>
+         Welcome to your <span id="welcomeSession"></span> game of Bag Minge, <span id="welcomePlayer"></span>!
+      </h4>
+      <h5>
+        You're on the <span id="welcomeTeam" style="font-weight: bold; color:teal"></span> team, join up with your teammates now!
+      </h5>
+      <hr>
+      <h5>
+       <span id="upNextPlayer" style="font-weight: bold; color:teal"></span> from the  <span id="upNextTeam" style="font-weight: bold; color:teal"></span> team is up next!
+      </h5>
+  
+      
+  
+    </div>
+      <div class="row"><button id="welcomeTeamsButton" onclick="showTeamScreen();"  class="homebuttons waves-effect btn teal lighten-2"><i class="material-icons left">people_outline</i>See all teams</button></div>
+       <div class="row"><button id="welcomeHomeButton"  onclick="showSection(homeScreen, menuHome);showHomeScreenDetails();" class="homebuttons waves-effect red lighten-2 btn"><i class="material-icons left">home</i>Go to the home screen</button></div>
+   
+  </div>
+</section>
+  
+  
 <!--*****************************    
 Game home Screen
 **************************-->
@@ -287,7 +334,7 @@ Game home Screen
     <div class="container">
       <br>
        <div class="row" id="homeNextInfo">
-         <div class="col s2"><h7><b>Next:</b></h7></div>
+         <div class="col s2"><h7><b>Next up:</b></h7></div>
       <div class="col s3"><h7 id="showNextPlayer" >Player</h7></div>
       <div class="col s4"><h7 id="showNextTeam" >Team</h7></div>
       <div  class="col s3"><h7 id="showRound">Round</h7></div>
@@ -301,6 +348,13 @@ Game home Screen
       </div>
     </div>
   </section>
+
+<div class="more-ot-alert" id="turnAlert" style="display:none">
+  <span class="close-ot-alert">
+    <i class="material-icons">play_arrow</i>
+  </span>
+  <p>It's your turn!</p>
+</div>
 
 <!--*****************************  
 start screen 
@@ -349,8 +403,8 @@ start screen
 <section id="roundEnd-splash" style="display:none">
   <div class="container">
   <section id="roundEndScore">
-  <h6 id="endRoundMessage" class="center">-</h6>  
-  <h6 id="endRoundScore" class="center">-</h6>
+  <h7 id="endRoundMessage" class="center">-</h7>  
+  <h7 id="endRoundScore" class="center">-</h7>
     <div class="row">
      <div class="col s6 collection" id="namesGuessed1" style="border:0px">
        <a class="collection-header">Names Guessed:</a>
@@ -372,9 +426,9 @@ start screen
         <li id="nameGuessed12" class="collection-item"></li>
         <li id="nameGuessed14" class="collection-item"></li>
      </div>    
-    </div>        
+    </div>   
+     
   </section>
-  <button id="endRoundShowScores" onclick="endRoundNext();" class="btn-large"><i class="material-icons left">insert_chart</i> Show scores</button>
   </div>  
 </section>
   <!--directions_run for acting round-->
@@ -491,8 +545,8 @@ $(document).ready(function(){$('.tabs').tabs();});
 
   <!-- show scores screen 
 **************************-->
-  <section id="scoresScreen" style="display:none">
-    <div class="container" >  
+  <div class="container">  
+      <div id="scoreboard" style="display:none">
           <div class="row scores1" id="gridOne">
             <div class="col s10" id="scoreGridTeamOne">TEAM A
              </div>
@@ -513,12 +567,18 @@ $(document).ready(function(){$('.tabs').tabs();});
              </div>
             <div class="col s2" id="scoreGridTeamFourScore">-</div>
           </div>
+     </div>
+  </div>
+  
+  
+  <section id="scoresScreen" style="display:none">
+     <div class="container">      
       <div id="chartContainer" style="height: 280px; width: 100%; center-align"></div>
       <br>
       <div class="row scores2" id="mVPTag" style="display:none">
-        <div class="col s3">MVP: </div> 
+        <div class="col s2">MVP: </div> 
         <div class="col s7" id="mVP"></div>
-        <div class="col s2" id="mVPScore"></div> 
+        <div class="col s3" id="mVPScore"></div> 
       </div>
      </div>
 </section>
@@ -565,8 +625,8 @@ $(document).ready(function(){$('.tabs').tabs();});
       <p>"Bag Minge" is the perfect blend of party game classics; combining articulate with charades where a good memory for names gets you ahead</p>
       <p>Played across 3 rounds, teams of players take it in turns to draw names at random from the bag and either describe, give a clue or act it out for the rest of their team to guess</p>
       <p><b>Starting the game</b></p>
-      <p>One player (or "Bagmaster") creates a new session and sets the parameters of the game. Once this is created, other players will be able to join the game and get going</p>
-      <p>First off, each player in the game enters between 3 and 10 names (decided by the Bagmaster in the setup) into the bag. These names can be celebrities, athletes, historical figures or even just your mates Mum. The only criteria is that the name has to be broadly recognisable to the other players</p>
+      <p>One player (or "Bagmaster") creates a new game and sets up the parameters of the game (things like how many teams, how many names people enter, how long each turn goes on for). Once this is created, other players will be able to join the game and get going</p>
+      <p>First off, each player in the game enters names (number to be decided by the Bagmaster in the setup) into the bag. These names can be celebrities, athletes, historical figures or even just your mates Mum. The only criteria is that the name has to be broadly recognisable to the other players</p>
       <p>Once every player in the session has entered their names, the game begins and each player is randomly allocated to even teams</p>
       <p>Each team will take it in turns to have one player draw names from the bag while the others try to guess it. Once a name is guessed, it is removed from the bag for that round. The player can pass on a name ONCE per turn, though they can always come back to it later.</p> 
       <p>When the timer runs out, it's on to the next team to guess. The next player to draw from the bag will be shown on the home screen and the start turn button will be available for them to start their turn</p>
@@ -640,7 +700,7 @@ $(document).ready(function(){$('.tabs').tabs();});
     <div class="modal-content" style="align:center">
    
      <i id="wikiClose" href="#!" class="modal-close material-icons waves-effect waves-red">highlight_off</i>  
-    <iframe id="wiki" style="border:none"></iframe>
+    <iframe id="wiki" style="border:none" height="100%" width="auto"></iframe>
     
     <div id="wikiWait" class="preloader-wrapper big active">
           <div class="spinner-layer spinner-teal-only">
