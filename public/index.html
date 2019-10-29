@@ -62,8 +62,8 @@
 }</script>
   
   <link rel="stylesheet" href="main.css">
-
-  <!-- Firebase -->
+  
+   <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
@@ -114,6 +114,7 @@
 
   <!--preload sounds-->
   <audio id="countdownClockMP3" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2FCountdown%20-%20Clock%20Only-%5BAudioTrimmer.com%5D.mp3?v=1571373441344" preload="auto"></audio>
+  
   <audio id="notificationSound" src="
   https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Ffilling-your-inbox.mp3?v=1571374260768" preload="auto"></audio>
 <!--*****************************    
@@ -122,8 +123,7 @@ Welcome splash screen
   <section id="wordCloud" style="display:block">
  <p id="wordCloudNames">Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell Boris Johnson ScoMo Ben Stokes Harry Kane Indiana Jones Mr Potato Head Postman Pat Joseph Goebbels Rolf Harris James Bond R Kelly Danny Dyer James Anderson Kawhi Leonard Dele Alli Donald Trump Winston Churchill Gareth's Sister Andy Murray Jack Phipson Stephen Gerrard Shane Warne Stephen Hawking Robin Hood Michael Palin Darryl Braithwaite Jeff Bezos Albert Einstein Jade Goody Sue Chessell</p>
   </section>
-  
-  
+    
   <section id="page-splash" style="display:block">
     <div align="center" class="container">
     <div class="row">
@@ -139,12 +139,7 @@ Welcome splash screen
          </div>  
     </div>
     <img  id="splashLogo" alt="logo" src="https://cdn.glitch.com/9d50421d-0dee-4efc-8f0a-51d50515a54b%2Fshopping-bag%20(1).png?v=1571619765796">
-    </section>
-  
-  
-
-  
- 
+    </section> 
   
     <!-- GAME OVER SCREEN
 **************************-->
@@ -205,7 +200,16 @@ create new game screen
      </select>
       <label>How many names should each person enter?</label>
  </div>
-  <br>    
+  <br>
+
+  <div class="switch">
+    <label>
+      Joker Turn (x2 points):
+      <input id="createJoker" type="checkbox">
+      <span  class="lever"></span>
+    </label>
+  </div>
+  <br> 
   <form action="#">
     <p class="range-field inline">
     <label>How many seconds for each turn?</label>
@@ -347,7 +351,7 @@ Game home Screen
          <div class="row"><button id="homeRoundButton" onclick="showRoundScreen()"  class="homebuttons waves-effect btn teal darken-4"><i class="material-icons left">live_tv</i>Live round</button></div>           
       </div>
     </div>
-  </section>
+</section>
 
 <div class="more-ot-alert" id="turnAlert" style="display:none">
   <span class="close-ot-alert">
@@ -366,6 +370,17 @@ start screen
   <div class="container">
    <div id="startShowCurrentRound"></div>
    <p id="startTimeLeft"></p>
+     
+   <div id="startJoker" class="Switch" style="display:none">
+      <div class="switch">
+     Activate Joker : 
+        <label>
+      <input id="activeJoker" type="checkbox">
+      <span  class="lever"></span>
+      </label>
+    </div>
+    </div>
+    <hr>
    <h5>Are you ready <span id="startShowPlayer"></span>?</h5>
     <p></p>
     <button id="gameStartButton" onclick="startRound()" class="standard waves-effect waves-light btn" ><i class="material-icons left">record_voice_over</i>Start round</button>
@@ -624,14 +639,34 @@ $(document).ready(function(){$('.tabs').tabs();});
       <h4>How to play</h4>
       <p>"Bag Minge" is the perfect blend of party game classics; combining articulate with charades where a good memory for names gets you ahead</p>
       <p>Played across 3 rounds, teams of players take it in turns to draw names at random from the bag and either describe, give a clue or act it out for the rest of their team to guess</p>
-      <p><b>Starting the game</b></p>
-      <p>One player (or "Bagmaster") creates a new game and sets up the parameters of the game (things like how many teams, how many names people enter, how long each turn goes on for). Once this is created, other players will be able to join the game and get going</p>
-      <p>First off, each player in the game enters names (number to be decided by the Bagmaster in the setup) into the bag. These names can be celebrities, athletes, historical figures or even just your mates Mum. The only criteria is that the name has to be broadly recognisable to the other players</p>
-      <p>Once every player in the session has entered their names, the game begins and each player is randomly allocated to even teams</p>
-      <p>Each team will take it in turns to have one player draw names from the bag while the others try to guess it. Once a name is guessed, it is removed from the bag for that round. The player can pass on a name ONCE per turn, though they can always come back to it later.</p> 
-      <p>When the timer runs out, it's on to the next team to guess. The next player to draw from the bag will be shown on the home screen and the start turn button will be available for them to start their turn</p>
-      <p>If there are no names left in the bag, the round ends but your time gets carried over to the next round</p>
-      <p>At the end of the 3rd round, the team with the most names guessed wins! </p>
+      <p>
+        <b>Starting the game</b>
+      </p>
+      <p>
+        One player (or "Bagmaster") creates a new game and sets up the parameters of the game (things like how many teams, how many names people enter, how long each turn goes on for). Once this is created, other players will be able to join the game and get going.
+      </p>
+      <p>
+        First off, each player in the game enters names (number to be decided by the Bagmaster in the setup) into the bag. These names can be celebrities, athletes, historical figures or even just your mates Mum. The only criteria is that the name has to be broadly recognisable to the other players
+      </p>
+      <p>
+        Once every player in the session has entered their names, the game begins and each player is randomly allocated to even teams
+      </p>
+      <p>
+        Each team will take it in turns to have one player draw names from the bag while the others try to guess it. Once a name is guessed, it is removed from the bag for that round and the players pulls the next name. The player can pass on a name ONCE per turn, though they can always come back to it later.
+      </p> 
+      <p>
+        When the timer runs out, it's on to the next team to guess. The next player to draw from the bag will be shown at the top of the home screen and the start turn button will be available for them to start their turn
+      </p>
+      <p>
+        If there are no names left in the bag, the round ends but your time gets carried over to the next round
+      </p>
+      <p>
+        At the end of the 3rd round, the team with the most names guessed wins! 
+      </p>
+      <p>
+        Optional: During the game setup, the bagmaster can enable a "Joker" round that each team can play once during the game before their turn starts. During this round, every name guessed counts for 2 points. If you run out of names during the round, your joker carries on for the remainder of your turn. Use it wisely!
+      </p>
+
       
       <hr>
       

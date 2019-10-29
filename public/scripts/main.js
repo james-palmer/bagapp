@@ -32,6 +32,7 @@ var sessions = db.collection('sessions');
 var names = db.collection('names');
 var teams = db.collection('teams');
 var increaseBy = firebase.firestore.FieldValue.increment(1);
+var increaseBy2 = firebase.firestore.FieldValue.increment(2);
 
 var wordCloudNames = []
 
@@ -45,7 +46,13 @@ var teamPicked;
 var sessionPicked;
 var namesPerPlayer
 
+var jokerGame
+var jokerAvailable
+var jokerActive = false
+
 var gameStarted
+
+
 
     var playerScores= []
     var playerScore
@@ -283,6 +290,7 @@ db.collection("sessions").doc(sess).delete().then(function() {
 }
 
 function bmLogOut(){
+  noSleep.disable();
   document.getElementById("waitScreen").style.display = "none";
   document.getElementById("createScreen").style.display = "none";
   document.getElementById("joinScreen").style.display = "none";
@@ -421,10 +429,11 @@ var t2number = 1
 var t3number = 1
 var t4number = 1
 var t5number = 1
-var countNumberPlayers = playerNames.length
-var currentPlayerNumber
+var countNumberPlayers = playerNames.length;
+var currentPlayerNumber;
 namesPerPlayer = document.getElementById("createNameCount").value;
-
+jokerGame = document.getElementById("createJoker").checked;
+  debugger;
 activePlayers = playerNames
 sessionPicked = sessName
 shuffle(playerNames);
@@ -451,10 +460,10 @@ teamCount = parseInt(teamsSelected,10)
       }
     
 // Create team 1
-db.collection("teams").doc(teamOne).set({tpNumber: 1, sessionName: sessName, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team one successfully created!");
+db.collection("teams").doc(teamOne).set({tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team one successfully created!");
 }).catch(function(error) {console.error("Error writing document: ", error);});
 // Create team 2
-db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
 }).catch(function(error) {console.error("Error writing document: ", error);});
 
    if (teamCount == 3) {
@@ -463,7 +472,7 @@ db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1S
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
       
       // create team 3
-      db.collection("teams").doc(teamThree).set({tpNumber: 1, sessionName: sessName, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+      db.collection("teams").doc(teamThree).set({tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);});  
     
     for (var i = 0, len = playerNames.length; i < len; i++) { 
@@ -539,10 +548,10 @@ db.collection("teams").doc(teamTwo).set({tpNumber: 1, sessionName: sessName, r1S
       }).catch(function(error) {console.error("Error writing document: ", error);}); 
       
       // create team 3 and 4
-      db.collection("teams").doc(teamThree).set({tpNumber: 1, sessionName: sessName, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+      db.collection("teams").doc(teamThree).set({tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);});  
     
-      db.collection("teams").doc(teamFour).set({tpNumber: 1, sessionName: sessName, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
+      db.collection("teams").doc(teamFour).set({tpNumber: 1, sessionName: sessName, jokerAvailable: jokerGame, r1Score: 0, r2Score: 0, r3Score: 0 , lastRoundScore: 0, teamSize: 0, p01:"", p02:"",p03:"",p04:"",p05:"",p06:"",p07:"",p08:"",p09:""}).then(function() {console.log("Team two successfully created!");
       }).catch(function(error) {console.error("Error writing document: ", error);});  
      
     for (var i = 0, len = playerNames.length; i < len; i++) { 
@@ -775,6 +784,7 @@ function playerPick() {
 }
 
 function joinGame(){
+  enableNS();
   console.log("Session Picked: "+sessionPicked)
   console.log("Player Picked: "+playerPicked)
   document.getElementById("joinScreen").style.display = "none";
@@ -908,6 +918,7 @@ var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false
   
        db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
                 if (doc.exists) { gameStarted = doc.data().started;
+                                  
                                   var upNextPlayer = doc.data().currentPlayer;
                                   var upNextTeam = doc.data().currentTeam
                                   document.getElementById("upNextTeam").innerHTML = upNextTeam;
@@ -1461,9 +1472,10 @@ function getBagNames(){
 
 
 function getStartInfo () {
+  
   getRoundTime();   
-  showSection(startScreen, menuStart);
 
+  showSection(startScreen, menuStart);
      
   db.collection("players").doc(playerPicked).get().then(function(doc) {
     if (doc.exists) { playerTurns = doc.data().turns;
@@ -1472,7 +1484,22 @@ function getStartInfo () {
      };
   });
   
+  db.collection("teams").doc(teamPicked).get().then(function(doc) {
+    if (doc.exists) { jokerAvailable = doc.data().jokerAvailable;
+                     console.log("Joker Available: "+jokerAvailable);
+                     
+                     if (jokerAvailable == true) {
+                         document.getElementById("startJoker").style.display = "block"; 
+                     }
+                     
+                  } else {console.log("No such document!");
+     };
+  });
+  
   document.getElementById("start-splash").style.display = "block"; 
+ 
+  
+  
   db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
     if (doc.exists) {currentRound = doc.data().currentRound;
                      console.log("Current Round: "+currentRound);
@@ -1506,11 +1533,20 @@ function getRoundTime(){
 };
 
 function startRound() {
+ 
+  jokerActive = document.getElementById("activeJoker").checked;
+  document.getElementById("startJoker").style.display = "none";
+  
+  
   hideAlert();
-  namesGotThisRound = [];
+    
   disableNavBarButtons();
+  
   enableGotItButton();
+  
   hideGotPassButton();
+  
+  namesGotThisRound = [];
   gameHasPassed = false;
   nameArrayCount = 0;
   document.getElementById("gameStart").style.display = "block";  
@@ -1592,10 +1628,12 @@ function shuffle(arra1) {
 // notes: passed name will always be [0]
 function gameGotItButton () {
 gameRemoveName();
+  
   //case - user hasn't passed and there are no names left
 if(bagNames.length == 0 && gameHasPassed == false){
 noNamesLeft();
-} else if (bagNames.length == 1 && gameHasPassed==true) {
+} 
+  else if (bagNames.length == 1 && gameHasPassed==true) {
 //case - user got the name and the passed name is the only one left
 document.getElementById('gameGotItButton').disabled = false;
 document.getElementById('gamePassButton').disabled = true; 
@@ -1604,7 +1642,8 @@ document.getElementById('gameShowNamePassed').innerHTML = "-"
 document.getElementById('gameShowName').innerHTML = bagNames[0];
 nameArrayCount = 0;
 hideGotPassButton();  
-} else if (bagNames.length == 1 && gameHasPassed==false) {
+} 
+  else if (bagNames.length == 1 && gameHasPassed==false) {
 //case - user got the name and there is only one left with no passes
 document.getElementById('gameGotItButton').disabled = false;
 document.getElementById('gamePassButton').disabled = true; 
@@ -1613,7 +1652,8 @@ document.getElementById('gameShowNamePassed').innerHTML = "-"
 document.getElementById('gameShowName').innerHTML = bagNames[0];
 nameArrayCount = 0;
 hideGotPassButton();  
-} else {
+} 
+  else {
 //case - user hasn't passed and there is at least one name left
 gameUpdateNumberLeft();
 currentBagName = bagNames[nameArrayCount]
@@ -1694,6 +1734,7 @@ document.getElementById('gameShowName').innerHTML = "-";
 
 
 function gameRemoveName (){
+document.getElementById('notificationSound').play();
 var namesRemoved = (bagNames.splice(nameArrayCount, 1 )).toString();
 namesGotThisRound.push(namesRemoved);  
 var nextRound = currentRound + 1
@@ -1713,7 +1754,32 @@ db.collection("names").doc(updateNameRound[0]).update({round: nextRound}).then(f
 db.collection("sessions").doc(sessionPicked).update({lastNameGuessed: namesRemoved}).then(function() {console.log("Last name guessed updated to: "+namesRemoved);
 }).catch(function(error) {console.error("Error updating name round: ", error);});  
 
- 
+ // If joker round is active, increase by 2
+
+  if (jokerActive == true) {
+           if (currentRound == 1){ 
+db.collection('teams').doc(teamPicked).update({ r1Score: increaseBy2 }).then(function() {console.log("r1Score increased by 2");
+}).catch(function(error) {console.error("Error updating r1Score: ", error);});
+} else if (currentRound == 2) {
+db.collection('teams').doc(teamPicked).update({ r2Score: increaseBy2 }).then(function() {console.log("r2Score increased by 2");
+}).catch(function(error) {console.error("Error updating r2Score: ", error);});  
+} else {
+db.collection('teams').doc(teamPicked).update({ r3Score: increaseBy2 }).then(function() {console.log("r3Score increased by 2");
+}).catch(function(error) {console.error("Error updating r3Score: ", error);});  
+};  
+    
+db.collection('sessions').doc(sessionPicked).update({ currentScore: increaseBy2 }).then(function() {console.log("session current score increased by 2");
+}).catch(function(error) {console.error("Error updating currentScore: ", error);});  
+  
+db.collection('teams').doc(teamPicked).update({ totalScore: increaseBy2 }).then(function() {console.log("totalScore increased by 2");
+}).catch(function(error) {console.error("Error updating totalScore: ", error);});  
+  
+db.collection('players').doc(playerPicked).update({ score: increaseBy2 }).then(function() {console.log("player score increased by 2");
+}).catch(function(error) {console.error("Error updating player Score: ", error);});    
+    
+  }
+
+  else {
 //add to score of current team in current round  
        if (currentRound == 1){ 
 db.collection('teams').doc(teamPicked).update({ r1Score: increaseBy }).then(function() {console.log("r1Score increased");
@@ -1727,7 +1793,7 @@ db.collection('teams').doc(teamPicked).update({ r3Score: increaseBy }).then(func
 };  
 
 db.collection('sessions').doc(sessionPicked).update({ currentScore: increaseBy }).then(function() {console.log("session current score increased");
-}).catch(function(error) {console.error("Error updating currentScore: ", error);});
+}).catch(function(error) {console.error("Error updating currentScore: ", error);});  
   
 db.collection('teams').doc(teamPicked).update({ totalScore: increaseBy }).then(function() {console.log("totalScore increased");
 }).catch(function(error) {console.error("Error updating totalScore: ", error);});  
@@ -1735,6 +1801,8 @@ db.collection('teams').doc(teamPicked).update({ totalScore: increaseBy }).then(f
 db.collection('players').doc(playerPicked).update({ score: increaseBy }).then(function() {console.log("player score increased");
 }).catch(function(error) {console.error("Error updating player Score: ", error);});    
   
+}
+    
 console.log("Round names guessed: "+namesGotThisRound);
 console.log("Name guessed: "+namesRemoved); 
 };
@@ -1749,12 +1817,26 @@ function endRound(){
   //update last round score
   $('li').filter(function(){return $.trim($(this).html()) == '';}).show()
   $('li').filter(function(){return $.trim($(this).html()) == 'undefined';}).show()
+  
+  if (jokerActive == true) {
+  roundScore = namesGotThisRound.length*2;
+  console.log(roundScore);
+    db.collection('teams').doc(teamPicked).update({ lastRoundScore: roundScore, jokerAvailable: false }).then(function() {
+      console.log("lastRoundScore updated to "+roundScore);
+      console.log("Joker used")
+    }).catch(function(error) {console.error("Error updating lastRoundScore: ", error);});  
+    
+  }
+  
+  else {  
   roundScore = namesGotThisRound.length;
-    console.log(roundScore);
+  console.log(roundScore);
     db.collection('teams').doc(teamPicked).update({ lastRoundScore: roundScore }).then(function() {console.log("lastRoundScore updated to "+roundScore);
     }).catch(function(error) {console.error("Error updating lastRoundScore: ", error);});  
+      
+  }
   
-  
+
 var  newAvgScore = roundScore / playerTurns
   
     db.collection('players').doc(playerPicked).update({ avgScore: newAvgScore}).then(function() {console.log("player Avg score adjusted");
@@ -1768,6 +1850,7 @@ var  newAvgScore = roundScore / playerTurns
   else {
       document.getElementById('endRoundScore').innerHTML = "You scored "+roundScore+" points, well done!" 
     }
+  
 console.log("Names got this round: "+namesGotThisRound)
 
 document.getElementById('nameGuessed1').innerHTML = namesGotThisRound[0];
@@ -1784,6 +1867,7 @@ document.getElementById('nameGuessed11').innerHTML = namesGotThisRound[10];
 document.getElementById('nameGuessed12').innerHTML = namesGotThisRound[11];
 document.getElementById('nameGuessed13').innerHTML = namesGotThisRound[12];
 document.getElementById('nameGuessed14').innerHTML = namesGotThisRound[13];
+  
 $('li').filter(function(){return $.trim($(this).html()) == 'undefined';}).hide()
 $('li').filter(function(){return $.trim($(this).html()) == '';}).hide()  
   
@@ -1801,7 +1885,7 @@ function endRoundWithTimeLeft(){
       //what to do here when there aren't any names left but still time left
       //increment session round
       if (currentRound == 3) {
-      document.getElementById('endRoundMessage').innerHTML = "Game over!<br><p>That's it, no names left in this final round<br>Let's tally up the scores and find our winner!</p>"
+      document.getElementById('endRoundMessage').innerHTML = "<h5>Game over!</h5><hr><p>That's it, no names left in this final round<br>Let's tally up the scores and find our winner!</p><hr>"
         playerTurns = playerTurns + 1
   console.log(playerTurns)
   
@@ -1809,11 +1893,12 @@ function endRoundWithTimeLeft(){
 }).catch(function(error) {console.error("Error updating player Score: ", error);});    
         
       } else {
-      document.getElementById('endRoundMessage').innerHTML = "End of the round!<br><p> That's it, no names left for this round but it's still your go!<br>let's tally up the scores, then you go again with the time you had left!</p>"  
+      document.getElementById('endRoundMessage').innerHTML = "<h5>End of the round!</h5><hr><p> That's it, no names left for this round but it's still your go!<br>let's tally up the scores, then you go again with the time you had left!</p><hr>"  
       };  
       db.collection('sessions').doc(sessionPicked).update({ turnActive: false, currentRound: increaseBy, roundTime: timeLeftOver  }).then(function() {console.log("round end: Session round increased");
       }).catch(function(error) {console.error("Error updating r1Score: ", error);});
 
+  
       endRound();  
       
       };
@@ -1822,10 +1907,9 @@ function endRoundWithTimeLeft(){
 function endRoundWithNamesLeft(){
     //typical end of turn with names left
     //get default time and push to roundTime
-    document.getElementById('endRoundMessage').innerHTML = "Time's up!"  
-
+    document.getElementById('endRoundMessage').innerHTML = "<h5>Time's up!</h5><hr>"
   playerTurns = playerTurns + 1
-  db.collection('players').doc(playerPicked).update({ turns: increaseBy }).then(function() {console.log("player score increased");
+  db.collection('players').doc(playerPicked).update({ turns: increaseBy}).then(function() {console.log("player score increased");
 }).catch(function(error) {console.error("Error updating player Score: ", error);});    
   
      db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
@@ -1896,6 +1980,9 @@ function endRoundWithNamesLeft(){
        }).catch(function(error) {console.log("Error getting document:", error);});
                     
       endRound();  
+  
+  jokerActive = false;
+  jokerAvailable = false;
     };
 
 //***********************
@@ -2311,7 +2398,7 @@ function mVP(){
           playerName = doc.id
           playerScore = doc.data().score
           playerTurns = doc.data().turns
-          avgScore = playerScore / playerTurns
+          avgScore = Math.round( (playerScore / playerTurns) * 10 ) / 10
           orderedPlayerNames.push(playerName)
           playerScores.push(avgScore)
         });
@@ -2336,4 +2423,17 @@ function endGame(){
 
 }
 
+/*! NoSleep.min.js v0.9.0 - git.io/vfn01 - Rich Tibbett - MIT license */
+!function(A,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.NoSleep=e():A.NoSleep=e()}("undefined"!=typeof self?self:this,function(){return function(A){function e(B){if(o[B])return o[B].exports;var Q=o[B]={i:B,l:!1,exports:{}};return A[B].call(Q.exports,Q,Q.exports,e),Q.l=!0,Q.exports}var o={};return e.m=A,e.c=o,e.d=function(A,o,B){e.o(A,o)||Object.defineProperty(A,o,{configurable:!1,enumerable:!0,get:B})},e.n=function(A){var o=A&&A.__esModule?function(){return A.default}:function(){return A};return e.d(o,"a",o),o},e.o=function(A,e){return Object.prototype.hasOwnProperty.call(A,e)},e.p="",e(e.s=0)}([function(A,e,o){"use strict";function B(A,e){if(!(A instanceof e))throw new TypeError("Cannot call a class as a function")}var Q=function(){function A(A,e){for(var o=0;o<e.length;o++){var B=e[o];B.enumerable=B.enumerable||!1,B.configurable=!0,"value"in B&&(B.writable=!0),Object.defineProperty(A,B.key,B)}}return function(e,o,B){return o&&A(e.prototype,o),B&&A(e,B),e}}(),t=o(1),n=t.webm,c=t.mp4,E="undefined"!=typeof navigator&&parseFloat((""+(/CPU.*OS ([0-9_]{3,4})[0-9_]{0,1}|(CPU like).*AppleWebKit.*Mobile/i.exec(navigator.userAgent)||[0,""])[1]).replace("undefined","3_2").replace("_",".").replace("_",""))<10&&!window.MSStream,l=function(){function A(){var e=this;B(this,A),E?this.noSleepTimer=null:(this.noSleepVideo=document.createElement("video"),this.noSleepVideo.setAttribute("muted",""),this.noSleepVideo.setAttribute("title","No Sleep"),this.noSleepVideo.setAttribute("playsinline",""),this._addSourceToVideo(this.noSleepVideo,"webm",n),this._addSourceToVideo(this.noSleepVideo,"mp4",c),this.noSleepVideo.addEventListener("loadedmetadata",function(){e.noSleepVideo.duration<=1?e.noSleepVideo.setAttribute("loop",""):e.noSleepVideo.addEventListener("timeupdate",function(){e.noSleepVideo.currentTime>.5&&(e.noSleepVideo.currentTime=Math.random())})}))}return Q(A,[{key:"_addSourceToVideo",value:function(A,e,o){var B=document.createElement("source");B.src=o,B.type="video/"+e,A.appendChild(B)}},{key:"enable",value:function(){E?(this.disable(),console.warn("\n        NoSleep enabled for older iOS devices. This can interrupt\n        active or long-running network requests from completing successfully.\n        See https://github.com/richtr/NoSleep.js/issues/15 for more details.\n      "),this.noSleepTimer=window.setInterval(function(){document.hidden||(window.location.href=window.location.href.split("#")[0],window.setTimeout(window.stop,0))},15e3)):this.noSleepVideo.play()}},{key:"disable",value:function(){E?this.noSleepTimer&&(console.warn("\n          NoSleep now disabled for older iOS devices.\n        "),window.clearInterval(this.noSleepTimer),this.noSleepTimer=null):this.noSleepVideo.pause()}}]),A}();A.exports=l},function(A,e,o){"use strict";A.exports={webm:"data:video/webm;base64,GkXfo0AgQoaBAUL3gQFC8oEEQvOBCEKCQAR3ZWJtQoeBAkKFgQIYU4BnQI0VSalmQCgq17FAAw9CQE2AQAZ3aGFtbXlXQUAGd2hhbW15RIlACECPQAAAAAAAFlSua0AxrkAu14EBY8WBAZyBACK1nEADdW5khkAFVl9WUDglhohAA1ZQOIOBAeBABrCBCLqBCB9DtnVAIueBAKNAHIEAAIAwAQCdASoIAAgAAUAmJaQAA3AA/vz0AAA=",mp4:"data:video/mp4;base64,AAAAIGZ0eXBtcDQyAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAACKBtZGF0AAAC8wYF///v3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE0MiByMjQ3OSBkZDc5YTYxIC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAxNCAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTEgcmVmPTEgZGVibG9jaz0xOjA6MCBhbmFseXNlPTB4MToweDExMSBtZT1oZXggc3VibWU9MiBwc3k9MSBwc3lfcmQ9MS4wMDowLjAwIG1peGVkX3JlZj0wIG1lX3JhbmdlPTE2IGNocm9tYV9tZT0xIHRyZWxsaXM9MCA4eDhkY3Q9MCBjcW09MCBkZWFkem9uZT0yMSwxMSBmYXN0X3Bza2lwPTEgY2hyb21hX3FwX29mZnNldD0wIHRocmVhZHM9NiBsb29rYWhlYWRfdGhyZWFkcz0xIHNsaWNlZF90aHJlYWRzPTAgbnI9MCBkZWNpbWF0ZT0xIGludGVybGFjZWQ9MCBibHVyYXlfY29tcGF0PTAgY29uc3RyYWluZWRfaW50cmE9MCBiZnJhbWVzPTMgYl9weXJhbWlkPTIgYl9hZGFwdD0xIGJfYmlhcz0wIGRpcmVjdD0xIHdlaWdodGI9MSBvcGVuX2dvcD0wIHdlaWdodHA9MSBrZXlpbnQ9MzAwIGtleWludF9taW49MzAgc2NlbmVjdXQ9NDAgaW50cmFfcmVmcmVzaD0wIHJjX2xvb2thaGVhZD0xMCByYz1jcmYgbWJ0cmVlPTEgY3JmPTIwLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IHZidl9tYXhyYXRlPTIwMDAwIHZidl9idWZzaXplPTI1MDAwIGNyZl9tYXg9MC4wIG5hbF9ocmQ9bm9uZSBmaWxsZXI9MCBpcF9yYXRpbz0xLjQwIGFxPTE6MS4wMACAAAAAOWWIhAA3//p+C7v8tDDSTjf97w55i3SbRPO4ZY+hkjD5hbkAkL3zpJ6h/LR1CAABzgB1kqqzUorlhQAAAAxBmiQYhn/+qZYADLgAAAAJQZ5CQhX/AAj5IQAD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"}}])});
 
+   var noSleep = new NoSleep();
+      var wakeLockEnabled = false;
+      var toggleEl = document.querySelector("#join-button");
+      toggleEl.addEventListener('click', function() {
+        console.log('a')
+        if (!wakeLockEnabled) {
+          noSleep.enable(); // keep the screen on!
+          wakeLockEnabled = true;
+          console.log("No Sleep Enabled")
+        } 
+      }, false);
