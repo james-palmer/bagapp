@@ -784,7 +784,6 @@ function playerPick() {
 }
 
 function joinGame(){
-  enableNS();
   console.log("Session Picked: "+sessionPicked)
   console.log("Player Picked: "+playerPicked)
   document.getElementById("joinScreen").style.display = "none";
