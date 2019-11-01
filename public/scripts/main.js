@@ -8,6 +8,7 @@ var menuStart = document.getElementById('menu-start');
 var menuTeams = document.getElementById('menu-teams');
 var menuScores = document.getElementById('menu-scores');
 var menuRound = document.getElementById('menu-round');
+var menuRefresh = document.getElementById('menu-refresh');
 
 //screens
 var homeScreen = document.getElementById('homeScreen');
@@ -188,18 +189,21 @@ window.addEventListener('load', function() {
   // ...
 });
 
- // Bind menu buttons.
+// Bind menu buttons.
   menuHome.onclick = function() {showSection(homeScreen, menuHome);showHomeScreenDetails();};
   menuStart.onclick = function() {getStartInfo(); hideAlert();};
   menuTeams.onclick = function() {showTeamScreen();};
   menuScores.onclick = function() {showScoresScreen();};
   menuRound.onclick = function() {showRoundScreen();};
-    
-   // Bind home screen buttons.
+  menuRefresh.onclick = function() {showHomeScreenDetails();};
+  
+// Bind home screen buttons.
   homeStartButton.onclick = function() {getStartInfo(); hideAlert();};
   homeTeamsButton.onclick = function() {showTeamScreen();};
   homeScoresButton.onclick = function() {showScoresScreen();};
   homeRoundButton.onclick = function()  {showRoundScreen();}; 
+  
+document.getElementById('join-button').onclick = function()  {joinScreen();};   
   
   
   //********************************************
@@ -353,11 +357,12 @@ window.navigator.vibrate(200);
 };
 
 function joinScreen(){
-getActiveSessions();
+
 document.getElementById("page-splash").style.display = "none";
 document.getElementById("wordCloud").style.display = "none";
 document.getElementById("joinScreen").style.display = "block";
 document.getElementById("header").style.display = "block";  
+getActiveSessions();
 };
 
 function adjustNameCount(){
@@ -956,7 +961,9 @@ var unsubscribe =  db.collection("players").where("hasEnteredNames", "==", false
 //When user Joins game - populate session and player functions
 function getActiveSessions () {
   activeSessions = [];
-   removeOptions(document.getElementById("selectSession"));
+  
+  removeOptions(document.getElementById("selectSession"));
+  
   db.collection("sessions").where("active","==",true).get().then(function(querySnapshot) {
      querySnapshot.forEach(function(doc) {
     activeSessions.push(doc.id); 
@@ -2333,7 +2340,8 @@ menuHome.style.display = "none"
 menuStart.style.display = "none"
 menuRound.style.display = "none"
 menuScores.style.display = "none"  
-menuTeams.style.display = "none"  
+menuTeams.style.display = "none"
+menuRefresh.style.display = "none"  
 }
 
 function enableNavBarButtons() {
@@ -2341,6 +2349,7 @@ menuHome.style.display = "block"
 menuRound.style.display = "block"
 menuScores.style.display = "block"  
 menuTeams.style.display = "block"  
+menuRefresh.style.display = "block"  
 }
 
 
