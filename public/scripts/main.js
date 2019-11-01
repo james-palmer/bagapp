@@ -1059,7 +1059,20 @@ function getTeamPicked() {
     if (doc.exists) { teamPicked = doc.data().team;
                      console.log("Team picked: "+teamPicked)
                      document.getElementById("welcomeTeam").innerHTML = teamPicked;
-  
+                  
+                     if(teamPicked == activeTeamOne){
+                    document.getElementById("teamOne").classList.add('active');
+                     }
+                     if(teamPicked == activeTeamTwo){
+                    document.getElementById("teamTwo").classList.add('active');
+                     }
+                     if(teamPicked == activeTeamThree){
+                    document.getElementById("teamThree").classList.add('active');
+                     }
+                     if(teamPicked == activeTeamFour){
+                    document.getElementById("teamFour").classList.add('active');
+                     }
+                     
     } else {console.log("No such document!");
     }}).catch(function(error) {console.log("Error getting document:", error);}); 
 };
@@ -1503,8 +1516,6 @@ function getStartInfo () {
   });
   
   document.getElementById("start-splash").style.display = "block"; 
- 
-  
   
   db.collection("sessions").doc(sessionPicked).get().then(function(doc) {
     if (doc.exists) {currentRound = doc.data().currentRound;
@@ -1512,11 +1523,15 @@ function getStartInfo () {
                      getBagNames();
                      
                   if (currentRound == 1){
-                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 1</h5><hr><p>Describe the bag name that is randomly shown to you for your team to guess.</p><p>You can use as many words as you like without saying the name or a rhyming word</p><p>e.g. for the name James, you can't say 'Rhymes with Games', but you could say 'Rhymes with 'something'-master'!"
+                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 1</h5><hr><p>Describe the bag name that is randomly shown to you for your team to guess.</p><p>You can use as many words as you like without saying the name or a rhyming word, e.g. for the name James Palmer, you can't say 'Rhymes with Games Farmer', but you could say 'Rhymes with a London River and agricultural professionals plus he created this awesome app!</p><p>If your team guess it, hit the 'Got it!' button, otherwise you have the option to pass once per turn. Good luck!</p>"
+                     document.getElementById('instructions').innerHTML = "Describe:"
+                    
                   } else if (currentRound == 2) {
-                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 2</h5><p></p><p>Use <strong>ONE</strong> word to describe the bag name that you pull out</p><p>Once you've said a word, there's no going back!</p><p>hint: the names are the same as they were in round 1"
-                  } else if (currentRound == 3) {
-                   document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 3</h5><p></p><p>Act out the bag name for your team</p><p>no sound effects, grunting or any other verbal hints or clues allowed!"
+                    document.getElementById('instructions').innerHTML = "1 word for:"
+                    document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 2</h5><p></p><p>Use <strong>ONE</strong> word to describe the bag name that you pull out</p><p>Once you've said a word, there's no going back!</p><p>hint: the names are the same as they were in round 1</p><p>If your team guess it, hit the 'Got it!' button, otherwise you have the option to pass once per turn. Good luck!</p>"
+                  } else if (currentRound == 3) {                  
+                   document.getElementById('instructions').innerHTML = "Act out:"
+                   document.getElementById('startShowCurrentRound').innerHTML = "<h5>Round 3</h5><p></p><p>Act out the bag name for your team</p><p>NO speaking or any other verbal hints or clues allowed!</p><p>If your team guess it, hit the 'Got it!' button, otherwise you have the option to pass once per turn. Good luck!</p>"
                   } else if (currentRound == 4) {
                   document.getElementById('startShowCurrentRound').innerHTML = "<h5>Game Over!</h5>"
                   }

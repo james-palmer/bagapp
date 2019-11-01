@@ -85,12 +85,12 @@
     </div>
      <div class="tab mdl-layout__header-row mdl-color-- teal lighten-3">
       <div class="mdl-tab">
-        <div id="menu-goHome" style="display: none" class="is-active mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">home</i></div>
-        <div id="menu-start"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">play_arrow</i></div>
-        <div id="menu-teams"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">group</i></div>     
-        <div id="menu-scores" style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">insert_chart</i></div>     
-        <div id="menu-round"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">live_tv</i></div>
-        <div id="menu-refresh"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">refresh</i></div>      
+        <div id="menu-goHome" style="display: none" class="mdl-layout__tab mdl-button mdl-js-button"><i class="material-icons">home</i></div>
+        <div id="menu-start"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button"><i class="material-icons">play_arrow</i></div>
+        <div id="menu-teams"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button"><i class="material-icons">group</i></div>     
+        <div id="menu-scores" style="display: none" class="mdl-layout__tab mdl-button mdl-js-button"><i class="material-icons">insert_chart</i></div>     
+        <div id="menu-round"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button"><i class="material-icons">live_tv</i></div>
+        <div id="menu-refresh"  style="display: none" class="mdl-layout__tab mdl-button mdl-js-button"><i class="material-icons">refresh</i></div>      
        </div>
     </div>
   </header>  
@@ -381,7 +381,11 @@ start screen
 <!-- game page -->
 <section style="display: none" id="gameStart">
    <div class="container">
-    <div class="center-align">
+        <div class="row">
+         <h5 id="instructions">
+         </h5>
+       </div>
+    <div class="row center-align">
       <h2 type="text" id="gameShowName" class="center-align" style="font-size: 25pt;">bag name</h2>
       <h2 class="timee" style="font-size: 60pt;" id="gameShowTime">-</h2>
     </div>
@@ -397,9 +401,10 @@ start screen
           <div class="col s7 push-s5"><button id="gameGotItButton" onclick="gameGotItButton()"  class="waves-effect yesno btn" >Got it!</button></div>
           <div class="col s5 pull-s7"><button id="gamePassButton" onclick="gamePassButton()"  class="waves-effect yesno red btn">Pass</button></div>
       </div>
-      <div class="container">
+      <div class="row">
            <button style ="display: none; ,margin-left: 10pt;" id="gameGotPassButton" onclick="gameGotPassButton()" class="waves-effect btn-small"><i class="material-icons left">thumb_up</i>Got the passed name!</button>
        </div>
+
 
     </div>
   </section>
@@ -445,7 +450,7 @@ start screen
 <section id="teamsScreen" style="display:none">
 <div class="row">
     <ul class="tabs">
-        <li class="tab col s3"><a href="#team1" id="teamOne" class="active">Team 1</a></li>
+        <li class="tab col s3"><a href="#team1" id="teamOne">Team 1</a></li>
         <li class="tab col s3"><a href="#team2" id="teamTwo" >Team 2</a></li>
         <li class="tab col s3"><a style="display:none" href="#team3" id="teamThree">Team 3</a></li>
         <li class="tab col s3"><a style="display:none" href="#team4" id="teamFour">Team 4</a></li>
@@ -598,6 +603,7 @@ $(document).ready(function(){$('.tabs').tabs();});
          <h5>No turn in progress</h5>
        </div>
     </div>
+    
     <div class="row">
        <div id="turnInProgress" class="turnInProgress" style="display:none">
            <h5 type="text" id="roundTeam" class="center-align"></h5>
